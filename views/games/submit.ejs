@@ -1,0 +1,195 @@
+<%- include('../partials/header', { title: 'Publicar Jogo' }) %>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card bg-dark border-secondary">
+                <div class="card-header">
+                    <h3><i class="fas fa-upload me-2"></i>Publicar Novo Jogo</h3>
+                </div>
+                <div class="card-body">
+                    <% if (typeof error !== 'undefined' && error) { %>
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i><%= error %>
+                        </div>
+                    <% } %>
+
+                    <form action="/games/submit" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Título do Jogo *</label>
+                                    <input type="text" class="form-control bg-dark text-light border-secondary" 
+                                           id="title" name="title" required maxlength="100">
+                                    <div class="invalid-feedback">
+                                        Por favor, insira o título do jogo.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="developer" class="form-label">Desenvolvedor *</label>
+                                    <input type="text" class="form-control bg-dark text-light border-secondary" 
+                                           id="developer" name="developer" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira o nome do desenvolvedor.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Descrição *</label>
+                            <textarea class="form-control bg-dark text-light border-secondary" 
+                                      id="description" name="description" rows="4" required maxlength="1000"></textarea>
+                            <div class="invalid-feedback">
+                                Por favor, insira uma descrição do jogo.
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="genre" class="form-label">Gênero *</label>
+                                    <select class="form-select bg-dark text-light border-secondary" 
+                                            id="genre" name="genre" required>
+                                        <option value="">Selecione um gênero</option>
+                                        <option value="Action">Ação</option>
+                                        <option value="Adventure">Aventura</option>
+                                        <option value="RPG">RPG</option>
+                                        <option value="Strategy">Estratégia</option>
+                                        <option value="Puzzle">Puzzle</option>
+                                        <option value="Racing">Corrida</option>
+                                        <option value="Sports">Esportes</option>
+                                        <option value="Simulation">Simulação</option>
+                                        <option value="Horror">Terror</option>
+                                        <option value="Indie">Indie</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Por favor, selecione um gênero.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="price" class="form-label">Preço (R$)</label>
+                                    <input type="number" class="form-control bg-dark text-light border-secondary" 
+                                           id="price" name="price" min="0" step="0.01" value="0">
+                                    <small class="text-muted">Deixe 0 para jogo gratuito</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Plataformas *</label>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="platform" value="PC" id="pc">
+                                        <label class="form-check-label" for="pc">PC</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="platform" value="PlayStation" id="ps">
+                                        <label class="form-check-label" for="ps">PlayStation</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="platform" value="Xbox" id="xbox">
+                                        <label class="form-check-label" for="xbox">Xbox</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="platform" value="Nintendo" id="nintendo">
+                                        <label class="form-check-label" for="nintendo">Nintendo</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="platform" value="Mobile" id="mobile">
+                                        <label class="form-check-label" for="mobile">Mobile</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="platform" value="Web" id="web">
+                                        <label class="form-check-label" for="web">Web</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="publisher" class="form-label">Editora</label>
+                                    <input type="text" class="form-control bg-dark text-light border-secondary" 
+                                           id="publisher" name="publisher">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="releaseDate" class="form-label">Data de Lançamento</label>
+                                    <input type="date" class="form-control bg-dark text-light border-secondary" 
+                                           id="releaseDate" name="releaseDate">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="tags" class="form-label">Tags</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" 
+                                   id="tags" name="tags" placeholder="Ex: multiplayer, online, co-op (separadas por vírgula)">
+                            <small class="text-muted">Separe as tags com vírgulas</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="trailer" class="form-label">Link do Trailer (YouTube)</label>
+                            <input type="url" class="form-control bg-dark text-light border-secondary" 
+                                   id="trailer" name="trailer" placeholder="https://youtube.com/watch?v=...">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="downloadLink" class="form-label">Link de Download</label>
+                            <input type="url" class="form-control bg-dark text-light border-secondary" 
+                                   id="downloadLink" name="downloadLink" placeholder="https://...">
+                            <small class="text-muted">Link direto ou para página de download</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="images" class="form-label">Imagens do Jogo</label>
+                            <div class="upload-area">
+                                <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                                <p>Arraste e solte as imagens aqui ou clique para selecionar</p>
+                                <input type="file" class="form-control bg-dark text-light border-secondary" 
+                                       id="images" name="images" multiple accept="image/*">
+                                <small class="text-muted">Máximo 5 imagens, até 5MB cada</small>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Importante:</strong> Seu jogo será revisado por nossa equipe antes de ser publicado. 
+                            Certifique-se de que todas as informações estão corretas.
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/games" class="btn btn-outline-secondary me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Submeter Jogo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

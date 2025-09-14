@@ -1,0 +1,178 @@
+<%- include('../partials/header', { title: 'Painel Administrativo' }) %>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary">
+                <div class="card-header">
+                    <h5><i class="fas fa-tachometer-alt me-2"></i>Painel de Controle</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="/admin/dashboard" class="list-group-item list-group-item-dark active">
+                        <i class="fas fa-home me-2"></i>Dashboard
+                    </a>
+                    <a href="/admin/stats" class="list-group-item list-group-item-dark">
+                        <i class="fas fa-chart-bar me-2"></i>Estatísticas
+                    </a>
+                    <% if (user.role === 'admin') { %>
+                        <a href="/admin/users" class="list-group-item list-group-item-dark">
+                            <i class="fas fa-users me-2"></i>Usuários
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4><%= stats.totalGames || 0 %></h4>
+                                    <p class="mb-0">Total de Jogos</p>
+                                </div>
+                                <i class="fas fa-gamepad fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card bg-warning text-dark">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4><%= stats.pendingGames || 0 %></h4>
+                                    <p class="mb-0">Pendentes</p>
+                                </div>
+                                <i class="fas fa-clock fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4><%= stats.totalUsers || 0 %></h4>
+                                    <p class="mb-0">Usuários</p>
+                                </div>
+                                <i class="fas fa-users fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4><%= stats.totalDownloads && stats.totalDownloads[0] ? stats.totalDownloads[0].total : 0 %></h4>
+                                    <p class="mb-0">Downloads</p>
+                                </div>
+                                <i class="fas fa-download fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-dark border-secondary">
+                <div class="card-header">
+                    <h5><i class="fas fa-clock me-2"></i>Jogos Pendentes de Aprovação</h5>
+                </div>
+                <div class="card-body">
+                    <% if (pendingGames && pendingGames.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Jogo</th>
+                                        <th>Desenvolvedor</th>
+                                        <th>Gênero</th>
+                                        <th>Submetido por</th>
+                                        <th>Data</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% pendingGames.forEach(game => { %>
+                                        <tr id="game-<%= game._id %>">
+                                            <td>
+                                                <strong><%= game.title %></strong><br>
+                                                <small class="text-muted"><%= game.description.substring(0, 50) %>...</small>
+                                            </td>
+                                            <td><%= game.developer %></td>
+                                            <td><span class="badge bg-primary"><%= game.genre %></span></td>
+                                            <td><%= game.submittedBy.username %></td>
+                                            <td><%= new Date(game.createdAt).toLocaleDateString('pt-BR') %></td>
+                                            <td>
+                                                <button class="btn btn-success btn-sm me-1" 
+                                                        onclick="approveGame('<%= game._id %>')">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <button class="btn btn-danger btn-sm" 
+                                                        onclick="rejectGame('<%= game._id %>')">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <div class="text-center py-4">
+                            <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                            <h5>Nenhum jogo pendente</h5>
+                            <p class="text-muted">Todos os jogos foram revisados!</p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function approveGame(gameId) {
+    if (!confirm('Aprovar este jogo?')) return;
+    
+    try {
+        const response = await fetch(`/admin/games/${gameId}/approve`, {
+            method: 'POST'
+        });
+        
+        if (response.ok) {
+            document.getElementById(`game-${gameId}`).remove();
+            location.reload();
+        }
+    } catch (error) {
+        alert('Erro ao aprovar jogo');
+    }
+}
+
+async function rejectGame(gameId) {
+    if (!confirm('Rejeitar este jogo? Esta ação não pode ser desfeita.')) return;
+    
+    try {
+        const response = await fetch(`/admin/games/${gameId}/reject`, {
+            method: 'POST'
+        });
+        
+        if (response.ok) {
+            document.getElementById(`game-${gameId}`).remove();
+            location.reload();
+        }
+    } catch (error) {
+        alert('Erro ao rejeitar jogo');
+    }
+}
+</script>
+
+<%- include('../partials/footer') %>

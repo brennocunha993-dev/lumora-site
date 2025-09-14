@@ -1,0 +1,2587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumora - Plataforma Gamer Definitiva</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-cyan: #00ffff;
+            --neon-purple: #8a2be2;
+            --neon-pink: #ff1493;
+            --dark-bg: #000000;
+            --darker-bg: #0a0a0a;
+            --card-bg: #111111;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #000000 100%);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Partículas de fundo */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* Navbar futurística */
+        .navbar {
+            background: rgba(0, 0, 0, 0.3) !important;
+            backdrop-filter: blur(30px);
+            padding: 20px 0;
+            position: relative;
+        }
+
+        .navbar-brand {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 2rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 20px var(--neon-cyan);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px var(--neon-cyan)); }
+            to { filter: drop-shadow(0 0 15px var(--neon-cyan)); }
+        }
+
+        .nav-link {
+            color: #fff !important;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--neon-cyan) !important;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-cyan);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after { width: 100%; }
+
+        /* Botão Menu */
+        .menu-btn {
+            position: absolute;
+            left: 25px;
+            top: 105%;
+            transform: translate3d(0, -50%, 0);
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.8), rgba(17, 17, 17, 0.9));
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            color: var(--neon-cyan);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: transform 0.08s ease-out, opacity 0.08s ease-out;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+
+        .menu-btn:hover {
+            transform: translate3d(0, -50%, 0) scale3d(1.05, 1.05, 1);
+        }
+
+        .menu-btn:active {
+            transform: translate3d(0, -50%, 0) scale3d(0.98, 0.98, 1);
+        }
+
+        /* Sidebar Menu */
+        .sidebar {
+            position: fixed;
+            top: 20px;
+            width: 280px;
+            height: 320px;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+                linear-gradient(145deg, rgba(0, 0, 0, 0.98), rgba(17, 17, 17, 0.95), rgba(0, 0, 0, 0.98));
+            backdrop-filter: blur(40px);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            border-radius: 25px;
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            padding: 80px 25px 25px;
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.8),
+                0 0 60px rgba(0, 255, 255, 0.2),
+                inset 0 2px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -2px 0 rgba(0, 255, 255, 0.1);
+            overflow: hidden;
+            transform: translate3d(-320px, 0, 0);
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-cyan), rgba(0, 255, 255, 0.3), var(--neon-cyan));
+            border-radius: 35px 15px 35px 15px;
+            z-index: -1;
+            animation: borderFlow 3s linear infinite;
+        }
+
+        .sidebar-title {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 60px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 1.4rem;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px var(--neon-cyan);
+            animation: titlePulse 3s ease-in-out infinite alternate, rainbowShift 4s ease-in-out infinite;
+            letter-spacing: 2px;
+        }
+
+        .sidebar-title i {
+            font-size: 1.3rem;
+            animation: iconSpin 4s linear infinite;
+        }
+
+        @keyframes titlePulse {
+            0% { text-shadow: 0 0 10px var(--neon-cyan); }
+            100% { text-shadow: 0 0 20px var(--neon-cyan), 0 0 30px var(--neon-cyan); }
+        }
+        
+        @keyframes rainbowShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes iconSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 255, 255, 0.1), transparent, rgba(0, 255, 255, 0.05), transparent);
+            animation: hologramSpin 8s linear infinite;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        @keyframes hologramSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 255, 0.03) 2px,
+                rgba(0, 255, 255, 0.03) 4px
+            );
+            animation: scanlines 2s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        @keyframes borderFlow {
+            0% { background: linear-gradient(45deg, var(--neon-cyan), rgba(0, 255, 255, 0.3), var(--neon-cyan)); }
+            50% { background: linear-gradient(45deg, rgba(0, 255, 255, 0.3), var(--neon-cyan), rgba(0, 255, 255, 0.3)); }
+            100% { background: linear-gradient(45deg, var(--neon-cyan), rgba(0, 255, 255, 0.3), var(--neon-cyan)); }
+        }
+
+        .sidebar.active {
+            transform: translate3d(15px, 0, 0) scale3d(1.02, 1.02, 1);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 60px rgba(0, 255, 255, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar.active::before {
+            opacity: 1;
+        }
+
+        @keyframes sidebarGlow {
+            0% { box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 255, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
+            100% { box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 50px rgba(0, 255, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 18px 22px;
+            margin: 10px 0;
+            border-radius: 15px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            font-size: 0.9rem;
+            background: 
+                linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(17, 17, 17, 0.4)),
+                radial-gradient(circle at center, rgba(0, 255, 255, 0.05), transparent);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-item i {
+            margin-right: 12px;
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .sidebar-item:hover::before {
+            left: 100%;
+        }
+
+        .sidebar-item:hover {
+            background: 
+                linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(0, 200, 200, 0.1)),
+                radial-gradient(circle at center, rgba(0, 255, 255, 0.15), transparent);
+            border-color: var(--neon-cyan);
+            color: #ffffff;
+            text-shadow: 0 0 15px var(--neon-cyan);
+            box-shadow: 
+                0 10px 40px rgba(0, 255, 255, 0.5),
+                0 0 30px rgba(0, 255, 255, 0.3),
+                inset 0 2px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -2px 0 rgba(0, 255, 255, 0.3);
+            transform: translateX(12px) scale(1.08) rotate(2deg);
+            animation: itemFloat 1.5s ease-in-out infinite alternate;
+            border-radius: 20px;
+        }
+
+        @keyframes itemFloat {
+            0% { transform: translateX(8px) scale(1.05) rotate(1deg) translateY(0px); }
+            100% { transform: translateX(8px) scale(1.05) rotate(1deg) translateY(-2px); }
+        }
+
+        .sidebar-item:hover i {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        @keyframes itemPulse {
+            0% { box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+            100% { box-shadow: 0 8px 30px rgba(0, 255, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
+        }
+
+        .sidebar-close {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: 
+                linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(17, 17, 17, 0.6)),
+                radial-gradient(circle, rgba(255, 0, 64, 0.1), transparent);
+            border: 2px solid rgba(255, 0, 64, 0.5);
+            color: #ff0040;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(255, 0, 64, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-close:hover {
+            background: 
+                linear-gradient(135deg, rgba(255, 0, 64, 0.3), rgba(200, 0, 50, 0.2)),
+                radial-gradient(circle, rgba(255, 0, 64, 0.2), transparent);
+            border-color: #ff0040;
+            transform: scale(1.2) rotate(90deg);
+            box-shadow: 
+                0 6px 25px rgba(0, 0, 0, 0.6),
+                0 0 40px rgba(255, 0, 64, 0.7),
+                inset 0 2px 0 rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            text-shadow: 0 0 15px #ff0040;
+            animation: closeButtonPulse 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes closeButtonPulse {
+            0% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); }
+            100% { box-shadow: 0 0 35px rgba(0, 255, 255, 0.7); }
+        }
+
+        /* Botões da navbar */
+        .nav-buttons {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 6px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-btn {
+            padding: 10px 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            background: transparent;
+        }
+
+        .btn-outline-light {
+            color: rgba(255, 255, 255, 0.8);
+            background: transparent;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .btn-outline-light:hover {
+            background: rgba(0, 255, 255, 0.1);
+            color: var(--neon-cyan);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .nav-btn:last-child {
+            background: rgba(0, 255, 255, 0.15);
+            color: var(--neon-cyan);
+            border: 1px solid var(--neon-cyan);
+        }
+
+        .nav-btn:last-child:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-cyan);
+            transform: translateY(-1px);
+        }
+
+        /* Painel do Usuário Conectado */
+        .user-panel {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(17, 17, 17, 0.8));
+            border: 2px solid var(--neon-cyan);
+            border-radius: 25px;
+            padding: 8px 15px;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.6),
+                0 0 30px rgba(0, 255, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: userPanelGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes userPanelGlow {
+            0%, 100% {
+                box-shadow: 
+                    0 8px 25px rgba(0, 0, 0, 0.6),
+                    0 0 30px rgba(0, 255, 255, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            }
+            50% {
+                box-shadow: 
+                    0 8px 25px rgba(0, 0, 0, 0.6),
+                    0 0 40px rgba(0, 255, 255, 0.4),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        .user-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            animation: userPanelScan 4s linear infinite;
+        }
+
+        @keyframes userPanelScan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .user-avatar-mini {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--neon-cyan), rgba(0, 255, 255, 0.6));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #000;
+            margin-right: 12px;
+            position: relative;
+            z-index: 2;
+            animation: avatarPulse 2s ease-in-out infinite;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+        }
+
+        @keyframes avatarPulse {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+                transform: scale(1.05);
+            }
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            margin-right: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .user-name {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+
+        .user-status {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.7rem;
+            color: #00ff41;
+            text-shadow: 0 0 8px #00ff41;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+            animation: statusBlink 2s ease-in-out infinite;
+        }
+
+        @keyframes statusBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .action-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(17, 17, 17, 0.9));
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            color: var(--neon-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .action-btn:hover::before {
+            opacity: 1;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(0, 200, 200, 0.1));
+            border-color: var(--neon-cyan);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            transform: scale(1.1);
+        }
+
+        .logout-btn {
+            border-color: rgba(255, 0, 64, 0.4);
+            color: #ff0040;
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.2), rgba(200, 0, 50, 0.1));
+            border-color: #ff0040;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 0, 64, 0.5);
+        }
+
+        .admin-btn {
+            border-color: rgba(255, 165, 0, 0.4);
+            color: #ffa500;
+        }
+
+        .admin-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 140, 0, 0.1));
+            border-color: #ffa500;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.5);
+        }
+
+        /* Hero Section Épica */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300ffff" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(10px, 10px); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px var(--neon-cyan);
+            animation: titleGlow 2s ease-in-out infinite alternate, heroRainbow 3s ease-in-out infinite;
+            margin-bottom: 2rem;
+        }
+        
+        @keyframes heroRainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px var(--neon-cyan); }
+            100% { text-shadow: 0 0 40px var(--neon-cyan), 0 0 60px var(--neon-cyan); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #ccc;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out 0.5s both;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        @keyframes subtitleGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3) drop-shadow(0 0 10px rgba(0, 255, 255, 0.5)); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Botões Hero */
+        .hero-btn {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 18px 35px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            margin: 0 10px;
+        }
+
+        .hero-btn:hover {
+            color: #000;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .hero-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .hero-btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-secondary {
+            border-color: rgba(0, 255, 255, 0.5);
+            color: rgba(0, 255, 255, 0.8);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 255, 255, 0.1);
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+
+        /* Cards de Jogos Futurísticos */
+        .game-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 128, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .game-card:hover::before { opacity: 1; }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.3), 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .game-image {
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .game-card:hover .game-image {
+            transform: scale(1.1);
+        }
+
+        /* Efeitos de texto */
+        .neon-text {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .glitch {
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        /* Seção de estatísticas */
+        .stats-section {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 80px 0;
+            border-top: 2px solid var(--neon-cyan);
+            border-bottom: 2px solid var(--neon-cyan);
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon-cyan);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(0, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        /* Formulários futurísticos */
+        .form-control {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background: rgba(0, 0, 0, 0.9);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            color: #fff;
+        }
+
+        /* Modal futurístico */
+        .modal-content {
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 15px;
+            backdrop-filter: blur(20px);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--neon-cyan);
+        }
+
+        /* Scrollbar invisível */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: transparent; }
+        
+        /* Para Firefox */
+        html { scrollbar-width: none; }
+        
+        /* Para IE/Edge */
+        body { -ms-overflow-style: none; }
+
+        /* Botão Neon */
+        .btn-neon {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 12px 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .btn-neon:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Animações de entrada */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .fade-in-up:nth-child(1) { animation-delay: 0.1s; }
+        .fade-in-up:nth-child(2) { animation-delay: 0.2s; }
+        .fade-in-up:nth-child(3) { animation-delay: 0.3s; }
+        .fade-in-up:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Animação do popup de tema */
+        @keyframes themePopup {
+            0% { 
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5) rotate(-10deg);
+            }
+            20% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.1) rotate(2deg);
+            }
+            40% {
+                transform: translate(-50%, -50%) scale(0.95) rotate(-1deg);
+            }
+            60% {
+                transform: translate(-50%, -50%) scale(1.02) rotate(0.5deg);
+            }
+            80% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            }
+            90% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8) rotate(0deg);
+            }
+        }
+
+        /* Esconder qualquer output de debug */
+        .themes-list, .debug-output, [data-debug] {
+            display: none !important;
+            visibility: hidden !important;
+        }
+
+        /* Verificação de Senha */
+        .password-strength {
+            margin-top: 10px;
+        }
+
+        .strength-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 3px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .strength-fill.weak {
+            background: linear-gradient(90deg, #ff0040, #ff4060);
+            width: 25%;
+        }
+
+        .strength-fill.fair {
+            background: linear-gradient(90deg, #ff6600, #ff8800);
+            width: 50%;
+        }
+
+        .strength-fill.good {
+            background: linear-gradient(90deg, #ffcc00, #ffdd00);
+            width: 75%;
+        }
+
+        .strength-fill.strong {
+            background: linear-gradient(90deg, #00ff41, #00ff80);
+            width: 100%;
+        }
+
+        .strength-text {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .strength-text.weak { color: #ff0040; }
+        .strength-text.fair { color: #ff6600; }
+        .strength-text.good { color: #ffcc00; }
+        .strength-text.strong { color: #00ff41; }
+
+        /* Mensagens de Validação */
+        .validation-message {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-height: 20px;
+        }
+
+        .validation-message.error {
+            color: #ff0040;
+        }
+
+        .validation-message.success {
+            color: #00ff41;
+        }
+
+        /* Divisor */
+        .divider {
+            position: relative;
+            text-align: center;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+        }
+
+        .divider-text {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 0 15px;
+            color: var(--neon-cyan);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+
+
+        /* Notificação Compacta */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: -300px;
+            width: 280px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(17, 17, 17, 0.9));
+            border: 2px solid #ff0040;
+            border-radius: 12px;
+            padding: 15px;
+            z-index: 10000;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 0, 64, 0.4);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            overflow: hidden;
+        }
+
+        .notification::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff0040, transparent, #ff0040);
+            animation: topGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes topGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .notification.show {
+            right: 20px;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            0% { transform: translateX(100%) scale(0.9); opacity: 0; }
+            100% { transform: translateX(0) scale(1); opacity: 1; }
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification-icon {
+            font-size: 1.5rem;
+            color: #ff0040;
+            animation: iconPulse 2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .notification-text {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            color: #ff0040;
+            text-shadow: 0 0 8px #ff0040;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .notification-message {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.8rem;
+            line-height: 1.3;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notification-close:hover {
+            background: rgba(255, 0, 64, 0.2);
+            color: #ff0040;
+            transform: scale(1.1);
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .notification-btn {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #ff0040;
+            color: #ff0040;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .notification-btn:hover {
+            background: #ff0040;
+            color: #000;
+            box-shadow: 0 0 10px rgba(255, 0, 64, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .notification-btn-secondary {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+
+        .notification-btn-secondary:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 3rem; }
+            .navbar-brand { font-size: 1.5rem; }
+            .warning-card { padding: 30px; margin: 20px; }
+            .warning-title { font-size: 1.5rem; }
+            .warning-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Partículas de fundo -->
+    <div id="particles-js"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <button class="menu-btn" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="position-absolute end-0 me-4" style="top: 60%;">
+                <div class="nav-buttons">
+                    <button class="btn btn-outline-light nav-btn" onclick="showLogin()">
+                        <i class="fas fa-sign-in-alt me-1"></i>Entrar
+                    </button>
+                    <button class="btn nav-btn" onclick="showRegister()">
+                        <i class="fas fa-user-plus me-1"></i>Cadastrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar" id="sidebar">
+        <button class="sidebar-close" onclick="toggleSidebar()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="sidebar-title">
+            <i class="fas fa-atom"></i>
+            <span>LUMORA</span>
+        </div>
+        <a href="#" class="sidebar-item" onclick="goHome()">
+            <i class="fas fa-home"></i>Início
+        </a>
+        <a href="#" class="sidebar-item" onclick="changeTheme()">
+            <i class="fas fa-palette"></i>Tema
+        </a>
+        <a href="#" class="sidebar-item" onclick="showSupport()">
+            <i class="fas fa-headset"></i>Suporte
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title glitch">LUMORA</h1>
+            <p class="hero-subtitle">A EXPERIÊNCIA GAMER DEFINITIVA TE AGUARDA</p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <button class="btn hero-btn" onclick="exploreGames()">
+                    <i class="fas fa-rocket me-2"></i>EXPLORAR JOGOS
+                </button>
+                <button class="btn hero-btn btn-secondary" onclick="showDownloadMessage()">
+                    <i class="fas fa-cloud-download-alt me-2"></i>BAIXAR AGORA
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="stat-card fade-in-up">
+                        <div class="stat-number" id="activeUsers">0</div>
+                        <div class="neon-text">GAMERS ONLINE</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="stat-card fade-in-up">
+                        <div class="stat-number" id="totalGames">0</div>
+                        <div class="neon-text">JOGOS CRIADOS</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="stat-card fade-in-up">
+                        <div class="stat-number" id="totalVisits">0</div>
+                        <div class="neon-text">VISITAS TOTAIS</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="stat-card fade-in-up">
+                        <div class="stat-number" id="siteRating">0</div>
+                        <div class="neon-text">AVALIAÇÃO %</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section id="games" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5 neon-text" style="font-family: 'Orbitron', monospace; font-size: 3rem;">
+                <i class="fas fa-fire me-3"></i>JOGOS EM DESTAQUE
+            </h2>
+            <div id="gamesGrid" class="row">
+                <!-- Games will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title neon-text"><i class="fas fa-sign-in-alt me-2"></i>TERMINAL DE ACESSO</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label neon-text">USUÁRIO</label>
+                            <input type="text" name="username" class="form-control" placeholder="Digite seu nome de usuário..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label neon-text">SENHA</label>
+                            <input type="password" name="password" class="form-control" placeholder="Digite sua senha..." required id="loginPasswordInput">
+                            <div class="validation-message" id="loginPasswordValidation"></div>
+                        </div>
+                        <button type="submit" class="btn btn-neon w-100">INICIALIZAR LOGIN</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title neon-text"><i class="fas fa-user-plus me-2"></i>JUNTAR-SE À ELITE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label class="form-label neon-text">NOME DE USUÁRIO</label>
+                            <input type="text" name="username" class="form-control" placeholder="Escolha sua identidade..." required id="usernameInput">
+                            <div class="validation-message" id="usernameValidation"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label neon-text">EMAIL</label>
+                            <input type="email" name="email" class="form-control" placeholder="Comunicação segura..." required id="emailInput">
+                            <div class="validation-message" id="emailValidation"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label neon-text">CÓDIGO DE ACESSO</label>
+                            <input type="password" name="password" class="form-control" placeholder="Crie sua chave de segurança..." required id="passwordInput">
+                            <div class="password-strength mt-2" id="passwordStrength">
+                                <div class="strength-bar">
+                                    <div class="strength-fill" id="strengthFill"></div>
+                                </div>
+                                <div class="strength-text" id="strengthText">Digite uma senha</div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-neon w-100">INICIALIZAR CONTA</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="supportModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title neon-text"><i class="fas fa-headset me-2"></i>SUPORTE TÉCNICO</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="supportForm">
+                        <div class="mb-3">
+                            <label class="form-label neon-text">EMAIL DE CONTATO</label>
+                            <input type="email" name="email" class="form-control" placeholder="seu@email.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label neon-text">ASSUNTO</label>
+                            <input type="text" name="subject" class="form-control" placeholder="Descreva brevemente o problema" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label neon-text">DESCRIÇÃO DO PROBLEMA</label>
+                            <textarea name="description" class="form-control" rows="4" placeholder="Descreva detalhadamente o problema encontrado..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label neon-text">PRIORIDADE</label>
+                            <select name="priority" class="form-control" id="prioritySelect" required>
+                                <option value="">Detectando automaticamente...</option>
+                                <option value="baixa">Baixa</option>
+                                <option value="media">Média</option>
+                                <option value="alta">Alta</option>
+                                <option value="critica">Crítica</option>
+                            </select>
+                            <small class="text-muted mt-1 d-block">Sistema detecta prioridade baseado no problema</small>
+                        </div>
+                        <button type="submit" class="btn btn-neon w-100">
+                            <i class="fas fa-paper-plane me-2"></i>ENVIAR SOLICITAÇÃO
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Função para obter cores atuais do tema
+        function getCurrentThemeColors() {
+            const style = getComputedStyle(document.documentElement);
+            return {
+                primary: style.getPropertyValue('--neon-cyan').trim(),
+                secondary: style.getPropertyValue('--neon-purple').trim(),
+                accent: style.getPropertyValue('--neon-pink').trim()
+            };
+        }
+
+        // Função para inicializar partículas com cores do tema
+        function initParticles() {
+            const colors = getCurrentThemeColors();
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: [colors.primary, colors.secondary, colors.accent] },
+                    shape: { type: 'circle' },
+                    opacity: { value: 0.5, random: false },
+                    size: { value: 3, random: true },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: colors.primary,
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: 'none',
+                        random: false,
+                        straight: false,
+                        out_mode: 'out',
+                        bounce: false
+                    }
+                },
+                interactivity: {
+                    detect_on: 'canvas',
+                    events: {
+                        onhover: { enable: true, mode: 'repulse' },
+                        onclick: { enable: true, mode: 'push' },
+                        resize: true
+                    }
+                },
+                retina_detect: true
+            });
+        }
+
+        // Inicializar partículas
+        initParticles();
+
+        // Jogos de exemplo
+        const games = [
+            {
+                id: 1,
+                title: "CYBER NEXUS",
+                description: "Mergulhe em um mundo cyberpunk de possibilidades infinitas",
+                genre: "RPG Cyberpunk",
+                rating: 4.9,
+                players: "2.5M",
+                image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=250&fit=crop"
+            },
+            {
+                id: 2,
+                title: "QUANTUM WARFARE",
+                description: "Batalhas estratégicas através de múltiplas dimensões",
+                genre: "Estratégia",
+                rating: 4.7,
+                players: "1.8M",
+                image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=250&fit=crop"
+            },
+            {
+                id: 3,
+                title: "NEON RACERS",
+                description: "Corridas em alta velocidade através de paisagens futurísticas",
+                genre: "Corrida",
+                rating: 4.8,
+                players: "3.2M",
+                image: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=400&h=250&fit=crop"
+            },
+            {
+                id: 4,
+                title: "SPACE ODYSSEY",
+                description: "Explore o cosmos infinito e construa seu império",
+                genre: "Simulador Espacial",
+                rating: 4.6,
+                players: "1.5M",
+                image: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=250&fit=crop"
+            }
+        ];
+
+        // Carregar jogos
+        function loadGames() {
+            const grid = document.getElementById('gamesGrid');
+            grid.innerHTML = games.map((game, index) => `
+                <div class="col-lg-3 col-md-6 mb-4 fade-in-up">
+                    <div class="card game-card h-100">
+                        <img src="${game.image}" class="card-img-top game-image" alt="${game.title}">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title neon-text" style="font-family: 'Orbitron', monospace;">${game.title}</h5>
+                            <p class="card-text text-light mb-3">${game.description}</p>
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="badge" style="background: linear-gradient(45deg, #00ffff, #ff0080); padding: 8px 12px;">${game.genre}</span>
+                                    <div class="neon-text">
+                                        <i class="fas fa-star"></i> ${game.rating}
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <small class="text-muted">
+                                        <i class="fas fa-users me-1"></i>${game.players} Jogadores
+                                    </small>
+                                </div>
+                                <button class="btn btn-neon w-100" onclick="launchGame(${game.id})">
+                                    <i class="fas fa-play me-2"></i>JOGAR AGORA
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Funções de estatísticas reais
+        function getActiveUsers() {
+            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const currentUser = localStorage.getItem('currentUser');
+            return currentUser ? users.length : 0;
+        }
+
+        function getTotalGames() {
+            const customGames = JSON.parse(localStorage.getItem('customGames') || '[]');
+            return customGames.length;
+        }
+
+        function getTotalVisits() {
+            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            return users.length;
+        }
+
+        function getSiteRating() {
+            const ratings = JSON.parse(localStorage.getItem('siteRatings') || '[5,5,4,5,5,4,5,5,5,4]');
+            const average = ratings.reduce((a, b) => a + b, 0) / ratings.length;
+            return Math.round((average / 5) * 100);
+        }
+
+        // Animação de contadores com dados reais
+        function animateCounters() {
+            const stats = [
+                { element: document.getElementById('activeUsers'), value: getActiveUsers() },
+                { element: document.getElementById('totalGames'), value: getTotalGames() },
+                { element: document.getElementById('totalVisits'), value: getTotalVisits() },
+                { element: document.getElementById('siteRating'), value: getSiteRating() }
+            ];
+
+            stats.forEach(stat => {
+                if (stat.element) {
+                    let current = 0;
+                    const increment = stat.value / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= stat.value) {
+                            if (stat.value >= 1000) {
+                                stat.element.textContent = stat.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                            } else {
+                                stat.element.textContent = stat.value;
+                            }
+                            clearInterval(timer);
+                        } else {
+                            const currentNum = Math.floor(current);
+                            if (currentNum >= 1000) {
+                                stat.element.textContent = currentNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                            } else {
+                                stat.element.textContent = currentNum;
+                            }
+                        }
+                    }, 30);
+                }
+            });
+        }
+
+        // Funções globais
+        window.showLogin = function() {
+            new bootstrap.Modal(document.getElementById('loginModal')).show();
+        }
+
+        window.showRegister = function() {
+            new bootstrap.Modal(document.getElementById('registerModal')).show();
+        }
+
+        window.showSupport = function() {
+            toggleSidebar();
+            new bootstrap.Modal(document.getElementById('supportModal')).show();
+            // Reset priority detection
+            document.getElementById('prioritySelect').options[0].textContent = 'Detectando automaticamente...';
+            document.getElementById('prioritySelect').value = '';
+        }
+
+        window.showDownloadMessage = function() {
+            showNotification('Download Indisponível', 'Funcionalidade em desenvolvimento', 'fa-tools', 'warning', false);
+        }
+
+        // Mostrar notificação compacta
+        function showNotification(title, message, icon = 'fa-lock', type = 'error', showActions = true) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            const borderColor = type === 'success' ? 'var(--neon-cyan)' : type === 'warning' ? '#ff6600' : '#ff0040';
+            notification.style.borderColor = borderColor;
+            
+            const actionsHtml = showActions ? `
+                <div class="notification-actions">
+                    <button class="notification-btn" onclick="notificationLogin(this)">
+                        Login
+                    </button>
+                    <button class="notification-btn notification-btn-secondary" onclick="notificationRegister(this)">
+                        Cadastrar
+                    </button>
+                </div>
+            ` : '';
+            
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <div class="notification-icon" style="color: ${borderColor};">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <div class="notification-text">
+                        <div class="notification-title" style="color: ${borderColor}; text-shadow: 0 0 8px ${borderColor};">${title}</div>
+                        <div class="notification-message">${message}</div>
+                    </div>
+                    <button class="notification-close" onclick="closeNotification(this)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                ${actionsHtml}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 50);
+            
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    closeNotification(notification);
+                }
+            }, showActions ? 5000 : 3000);
+        }
+        
+        window.closeNotification = function(element) {
+            const notification = element.closest ? element.closest('.notification') : element;
+            notification.style.right = '-400px';
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 500);
+        }
+        
+        window.notificationLogin = function(element) {
+            closeNotification(element);
+            showLogin();
+        }
+        
+        window.notificationRegister = function(element) {
+            closeNotification(element);
+            showRegister();
+        }
+
+        window.exploreGames = function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                showNotification('Acesso Negado', 'Login necessário para explorar');
+                return;
+            }
+            window.open('jogos.html', '_blank');
+            window.close();
+        }
+
+        window.launchGame = function(id) {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                showNotification('Acesso Negado', 'Login necessário para jogar');
+                return;
+            }
+            const game = games.find(g => g.id === id);
+            showNotification('Jogo Iniciado', `${game.title} carregando...`, 'fa-gamepad', 'success', false);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.querySelector('.menu-btn');
+            
+            if (sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+                menuBtn.style.opacity = '1';
+                menuBtn.style.pointerEvents = 'auto';
+                menuBtn.style.transform = 'translate3d(0, -50%, 0)';
+            } else {
+                sidebar.classList.add('active');
+                menuBtn.style.opacity = '0';
+                menuBtn.style.pointerEvents = 'none';
+                menuBtn.style.transform = 'translate3d(0, -50%, 0) scale3d(0, 0, 1)';
+            }
+        }
+
+        function goHome() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            toggleSidebar();
+        }
+
+        let currentTheme = 0;
+        const themes = [
+            { 
+                name: 'Cyber Cyan', 
+                primary: '#00ffff', secondary: '#8a2be2', accent: '#ff1493',
+                gradient: 'radial-gradient(circle at 20% 80%, #001122 0%, #000000 25%, #002244 50%, #000011 75%, #000000 100%)',
+                particles: ['#00ffff', '#00ccff', '#0099ff']
+            },
+            { 
+                name: 'Neon Purple', 
+                primary: '#8a2be2', secondary: '#ff1493', accent: '#00ffff',
+                gradient: 'linear-gradient(45deg, #1a0033 0%, #330066 25%, #2d0055 50%, #440088 75%, #1a0033 100%)',
+                particles: ['#8a2be2', '#9932cc', '#ba55d3']
+            },
+            { 
+                name: 'Matrix Green', 
+                primary: '#00ff41', secondary: '#32cd32', accent: '#7fff00',
+                gradient: 'conic-gradient(from 180deg at 50% 50%, #001100 0deg, #003300 72deg, #002200 144deg, #004400 216deg, #001100 288deg, #002200 360deg)',
+                particles: ['#00ff41', '#32cd32', '#7fff00']
+            },
+            { 
+                name: 'Vaporwave Pink', 
+                primary: '#ff1493', secondary: '#ff69b4', accent: '#ff00ff',
+                gradient: 'linear-gradient(135deg, #2d1b69 0%, #11001c 25%, #ff006e 50%, #8338ec 75%, #3a0ca3 100%)',
+                particles: ['#ff1493', '#ff69b4', '#ff00ff']
+            },
+            { 
+                name: 'Solar Orange', 
+                primary: '#ff6600', secondary: '#ff8c00', accent: '#ffa500',
+                gradient: 'radial-gradient(ellipse at center, #331100 0%, #662200 30%, #cc4400 60%, #331100 100%)',
+                particles: ['#ff6600', '#ff8c00', '#ffa500']
+            }
+        ];
+
+        function changeTheme() {
+            currentTheme = (currentTheme + 1) % themes.length;
+            const theme = themes[currentTheme];
+            
+            // Salvar tema no localStorage
+            localStorage.setItem('currentTheme', currentTheme.toString());
+            
+            // Mudar todas as variáveis de cor
+            document.documentElement.style.setProperty('--neon-cyan', theme.primary);
+            document.documentElement.style.setProperty('--neon-purple', theme.secondary);
+            document.documentElement.style.setProperty('--neon-pink', theme.accent);
+            
+            // Mudar fundo com gradiente complexo
+            document.body.style.background = theme.gradient;
+            
+            // Recriar partículas com nova cor usando as variáveis CSS atualizadas
+            setTimeout(() => {
+                const colors = getCurrentThemeColors();
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 100, density: { enable: true, value_area: 800 } },
+                        color: { value: [colors.primary, colors.secondary, colors.accent] },
+                        shape: { 
+                            type: ['circle', 'triangle', 'polygon'],
+                            polygon: { nb_sides: 6 }
+                        },
+                        opacity: { 
+                            value: 0.6, 
+                            random: true,
+                            anim: { enable: true, speed: 1, opacity_min: 0.1 }
+                        },
+                        size: { 
+                            value: 4, 
+                            random: true,
+                            anim: { enable: true, speed: 2, size_min: 0.5 }
+                        },
+                        line_linked: {
+                            enable: true,
+                            distance: 150,
+                            color: colors.primary,
+                            opacity: 0.5,
+                            width: 1.5
+                        },
+                        move: {
+                            enable: true,
+                            speed: 3,
+                            direction: 'none',
+                            random: true,
+                            straight: false,
+                            out_mode: 'bounce',
+                            bounce: true
+                        }
+                    },
+                    interactivity: {
+                        detect_on: 'canvas',
+                        events: {
+                            onhover: { enable: true, mode: ['repulse', 'bubble'] },
+                            onclick: { enable: true, mode: 'push' },
+                            resize: true
+                        },
+                        modes: {
+                            repulse: { distance: 100, duration: 0.4 },
+                            bubble: { distance: 200, size: 8, duration: 2 }
+                        }
+                    },
+                    retina_detect: true
+                });
+            }, 50);
+            
+            // Mostrar notificação do tema
+            showNotification('Tema Alterado', `Tema: ${theme.name}`, 'fa-palette', 'success', false);
+            
+            // Fechar sidebar automaticamente
+            toggleSidebar();
+        }
+        
+        // Carregar tema salvo
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('currentTheme');
+            if (savedTheme) {
+                currentTheme = parseInt(savedTheme);
+                const theme = themes[currentTheme];
+                if (theme) {
+                    document.documentElement.style.setProperty('--neon-cyan', theme.primary);
+                    document.documentElement.style.setProperty('--neon-purple', theme.secondary);
+                    document.documentElement.style.setProperty('--neon-pink', theme.accent);
+                    document.body.style.background = theme.gradient;
+                    
+                    // Atualizar partículas com o tema carregado
+                    setTimeout(() => {
+                        initParticles();
+                    }, 100);
+                }
+            }
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedTheme();
+            loadGames();
+            
+            // Animar contadores quando visíveis
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            observer.observe(document.querySelector('.stats-section'));
+
+            // Sistema de usuários
+            let users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            let currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                currentUser = users.find(u => u.username === currentUser);
+            }
+
+            // Inicializar lista de admins com BrennoX se não existir
+            let adminList = JSON.parse(localStorage.getItem('adminList') || '[]');
+            if (!adminList.includes('BrennoX')) {
+                adminList.push('BrennoX');
+                localStorage.setItem('adminList', JSON.stringify(adminList));
+            }
+            
+
+            
+            // Atualizar interface se logado
+            if (currentUser) {
+                updateNavButtons();
+                // Marcar como ativo
+                localStorage.setItem(`lastActive_${currentUser.username}`, new Date().getTime());
+            }
+
+            // Lista de palavras proibidas
+            const bannedWords = [
+                'pica', 'pau', 'pinto', 'caralho', 'porra', 'merda', 'bosta', 'cu', 'buceta', 'vagina',
+                'penis', 'tesao', 'punheta', 'broxa', 'puta', 'vadia', 'piranha', 'safada', 'gostosa',
+                'nazi', 'hitler', 'fascista', 'racista', 'admin', 'moderador', 'suporte', 'oficial',
+                'lumora', 'sistema', 'root', 'null', 'undefined', 'test', 'teste', 'fake', 'bot'
+            ];
+
+            function validateUsername(username) {
+                const lowerUsername = username.toLowerCase();
+                
+                // Verificar comprimento
+                if (username.length < 3) {
+                    return { valid: false, message: '❌ Mínimo 3 caracteres' };
+                }
+                if (username.length > 20) {
+                    return { valid: false, message: '❌ Máximo 20 caracteres' };
+                }
+                
+                // Verificar caracteres especiais
+                if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+                    return { valid: false, message: '❌ Apenas letras, números, _ e -' };
+                }
+                
+                // Verificar palavras proibidas
+                for (const word of bannedWords) {
+                    if (lowerUsername.includes(word)) {
+                        return { valid: false, message: '❌ Nome inapropriado' };
+                    }
+                }
+                
+                // Verificar se já existe
+                if (users.find(u => u.username === username)) {
+                    return { valid: false, message: '❌ Nome já existe' };
+                }
+                
+                return { valid: true, message: '✓ Nome disponível' };
+            }
+
+            // Verificação em tempo real de usuário
+            document.getElementById('usernameInput').addEventListener('input', (e) => {
+                const username = e.target.value.trim();
+                const validation = document.getElementById('usernameValidation');
+                
+                if (username.length === 0) {
+                    validation.textContent = '';
+                    validation.className = 'validation-message';
+                    return;
+                }
+                
+                const result = validateUsername(username);
+                validation.textContent = result.message;
+                validation.className = result.valid ? 'validation-message success' : 'validation-message error';
+            });
+
+            // Verificação em tempo real de email
+            document.getElementById('emailInput').addEventListener('input', (e) => {
+                const email = e.target.value.trim();
+                const validation = document.getElementById('emailValidation');
+                
+                if (email.length === 0) {
+                    validation.textContent = '';
+                    validation.className = 'validation-message';
+                    return;
+                }
+                
+                if (users.find(u => u.email === email)) {
+                    validation.textContent = '❌ Email já cadastrado';
+                    validation.className = 'validation-message error';
+                } else {
+                    validation.textContent = '✓ Email disponível';
+                    validation.className = 'validation-message success';
+                }
+            });
+
+            // Verificação de força da senha
+            document.getElementById('passwordInput').addEventListener('input', (e) => {
+                const password = e.target.value;
+                const strengthFill = document.getElementById('strengthFill');
+                const strengthText = document.getElementById('strengthText');
+                
+                const strength = checkPasswordStrength(password);
+                
+                strengthFill.className = 'strength-fill ' + strength.level;
+                strengthText.className = 'strength-text ' + strength.level;
+                strengthText.textContent = strength.text;
+            });
+
+            function checkPasswordStrength(password) {
+                if (password.length === 0) {
+                    return { level: '', text: 'Digite uma senha' };
+                }
+                
+                let score = 0;
+                
+                // Comprimento
+                if (password.length >= 8) score++;
+                if (password.length >= 12) score++;
+                
+                // Caracteres
+                if (/[a-z]/.test(password)) score++;
+                if (/[A-Z]/.test(password)) score++;
+                if (/[0-9]/.test(password)) score++;
+                if (/[^A-Za-z0-9]/.test(password)) score++;
+                
+                if (score <= 2) {
+                    return { level: 'weak', text: '🔴 FRACA - Muito vulnerável' };
+                } else if (score <= 4) {
+                    return { level: 'fair', text: '🟡 REGULAR - Precisa melhorar' };
+                } else if (score <= 5) {
+                    return { level: 'good', text: '🟢 BOA - Quase lá' };
+                } else {
+                    return { level: 'strong', text: '🛡️ FORTE - Segurança máxima' };
+                }
+            }
+
+            // Formulário de registro
+            document.getElementById('registerForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const username = formData.get('username');
+                const email = formData.get('email');
+                const password = formData.get('password');
+
+                // Verificar nome de usuário
+                const usernameValidation = validateUsername(username);
+                if (!usernameValidation.valid) {
+                    alert('❌ ' + usernameValidation.message.replace('❌ ', ''));
+                    return;
+                }
+
+                // Verificar força da senha
+                const strength = checkPasswordStrength(password);
+                if (strength.level === 'weak') {
+                    alert('🔒 Senha muito fraca! Use pelo menos 8 caracteres com letras, números e símbolos.');
+                    return;
+                }
+
+                // Verificar se email já existe
+                if (users.find(u => u.email === email)) {
+                    alert('❌ Email já cadastrado!');
+                    return;
+                }
+
+                // Criar novo usuário
+                const newUser = { 
+                    username, 
+                    email, 
+                    password, 
+                    registrationDate: new Date().toLocaleString('pt-BR')
+                };
+                users.push(newUser);
+                localStorage.setItem('registeredUsers', JSON.stringify(users));
+                
+                // Login automático
+                currentUser = newUser;
+                localStorage.setItem('currentUser', username);
+                
+                showNotification('Conta Criada', 'Bem-vindo à Lumora!', 'fa-user-plus', 'success', false);
+                bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
+                updateNavButtons();
+                e.target.reset();
+            });
+
+            // Sistema de detecção automática de prioridade
+            function detectPriority(subject, description) {
+                const text = (subject + ' ' + description).toLowerCase();
+                
+                const criticalKeywords = ['não funciona', 'erro crítico', 'sistema fora', 'não consigo entrar', 'perdeu dados', 'hack', 'vírus', 'urgente', 'emergência'];
+                const highKeywords = ['bug', 'erro', 'problema', 'falha', 'não carrega', 'lento', 'travando', 'importante'];
+                const mediumKeywords = ['dúvida', 'como', 'ajuda', 'sugestão', 'melhoria', 'recurso'];
+                
+                if (criticalKeywords.some(keyword => text.includes(keyword))) {
+                    return 'critica';
+                }
+                if (highKeywords.some(keyword => text.includes(keyword))) {
+                    return 'alta';
+                }
+                if (mediumKeywords.some(keyword => text.includes(keyword))) {
+                    return 'media';
+                }
+                return 'baixa';
+            }
+            
+            // Detectar prioridade em tempo real
+            function updatePriority() {
+                const subject = document.querySelector('#supportForm input[name="subject"]').value;
+                const description = document.querySelector('#supportForm textarea[name="description"]').value;
+                const prioritySelect = document.getElementById('prioritySelect');
+                
+                if (subject.trim() || description.trim()) {
+                    const detectedPriority = detectPriority(subject, description);
+                    prioritySelect.value = detectedPriority;
+                    
+                    const priorityNames = {
+                        'critica': 'Crítica (Auto)',
+                        'alta': 'Alta (Auto)',
+                        'media': 'Média (Auto)',
+                        'baixa': 'Baixa (Auto)'
+                    };
+                    
+                    prioritySelect.options[0].textContent = priorityNames[detectedPriority];
+                } else {
+                    prioritySelect.options[0].textContent = 'Detectando automaticamente...';
+                }
+            }
+            
+            // Adicionar listeners para detecção automática
+            document.querySelector('#supportForm input[name="subject"]').addEventListener('input', updatePriority);
+            document.querySelector('#supportForm textarea[name="description"]').addEventListener('input', updatePriority);
+
+            // Formulário de suporte
+            document.getElementById('supportForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const email = formData.get('email');
+                const subject = formData.get('subject');
+                const description = formData.get('description');
+                let priority = formData.get('priority');
+                
+                // Se não selecionou manualmente, usar detecção automática
+                if (!priority) {
+                    priority = detectPriority(subject, description);
+                }
+                
+                const ticket = {
+                    id: Date.now(),
+                    email: email,
+                    subject: subject,
+                    description: description,
+                    priority: priority,
+                    status: 'Aberto',
+                    date: new Date().toLocaleString('pt-BR')
+                };
+                
+                let tickets = JSON.parse(localStorage.getItem('supportTickets') || '[]');
+                tickets.push(ticket);
+                localStorage.setItem('supportTickets', JSON.stringify(tickets));
+                
+                showNotification('Suporte Enviado', 'Ticket #' + ticket.id + ' criado com sucesso!', 'fa-check', 'success', false);
+                bootstrap.Modal.getInstance(document.getElementById('supportModal')).hide();
+                e.target.reset();
+                document.getElementById('prioritySelect').options[0].textContent = 'Detectando automaticamente...';
+            });
+
+            // Formulário de login
+            document.getElementById('loginForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const username = formData.get('username');
+                const password = formData.get('password');
+                const passwordInput = document.getElementById('loginPasswordInput');
+                const passwordValidation = document.getElementById('loginPasswordValidation');
+
+                // Verificar credenciais
+                const user = users.find(u => u.username === username && u.password === password);
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('currentUser', username);
+                    
+                    showNotification('Login Realizado', 'Bem-vindo de volta!', 'fa-sign-in-alt', 'success', false);
+                    bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+                    updateNavButtons();
+                    e.target.reset();
+                    passwordValidation.textContent = '';
+                    passwordValidation.className = 'validation-message';
+                } else {
+                    // Limpar senha e mostrar erro
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                    passwordValidation.textContent = '❌ Senha incorreta';
+                    passwordValidation.className = 'validation-message error';
+                    
+                    // Limpar mensagem após 3 segundos
+                    setTimeout(() => {
+                        passwordValidation.textContent = '';
+                        passwordValidation.className = 'validation-message';
+                    }, 3000);
+                }
+            });
+
+            function updateNavButtons() {
+                const navButtons = document.querySelector('.nav-buttons');
+                if (currentUser) {
+                    const adminList = JSON.parse(localStorage.getItem('adminList') || '[]');
+                    const isAdmin = adminList.includes(currentUser.username);
+                    
+                    if (isAdmin) {
+                        // Interface para administradores
+                        navButtons.innerHTML = `
+                            <div class="user-panel" onclick="openAdminPanel()" style="cursor: pointer;">
+                                <div class="user-avatar-mini">
+                                    <i class="fas fa-user-astronaut"></i>
+                                </div>
+                                <div class="user-info">
+                                    <div class="user-name">${currentUser.username}</div>
+                                    <div class="user-status">CONECTADO (ADMIN)</div>
+                                </div>
+                                <div class="user-actions">
+                                    <button class="action-btn admin-btn" onclick="openAdminPanel(event)" title="Painel Admin">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <button class="action-btn logout-btn" onclick="logout(event)" title="Desconectar">
+                                        <i class="fas fa-power-off"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        // Interface para usuários normais
+                        navButtons.innerHTML = `
+                            <div class="user-panel">
+                                <div class="user-avatar-mini">
+                                    <i class="fas fa-user-astronaut"></i>
+                                </div>
+                                <div class="user-info">
+                                    <div class="user-name">${currentUser.username}</div>
+                                    <div class="user-status">CONECTADO</div>
+                                </div>
+                                <div class="user-actions">
+                                    <button class="action-btn logout-btn" onclick="logout(event)" title="Desconectar">
+                                        <i class="fas fa-power-off"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            window.logout = function(event) {
+                if (event) event.stopPropagation();
+                if (confirm('🚀 Desconectar da matriz?')) {
+                    const username = localStorage.getItem('currentUser');
+                    currentUser = null;
+                    localStorage.removeItem('currentUser');
+                    showNotification('Logout Realizado', `Até logo, ${username}!`, 'fa-sign-out-alt', 'warning', false);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }
+            }
+
+            window.openAdminPanel = function(event) {
+                if (event) event.stopPropagation();
+                const currentUser = localStorage.getItem('currentUser');
+                const adminList = JSON.parse(localStorage.getItem('adminList') || '[]');
+                
+                if (currentUser && adminList.includes(currentUser)) {
+                    window.open('painel.html', '_blank');
+                } else {
+                    showNotification('Acesso Negado', 'Apenas administradores podem acessar o painel', 'fa-shield-alt', 'error', false);
+                }
+            }
+            
+            window.showPanel = function() {
+                openAdminPanel();
+            }
+            
+            function checkAdminAccess() {
+                const currentUsername = localStorage.getItem('currentUser');
+                const adminList = JSON.parse(localStorage.getItem('adminList') || '[]');
+                
+                if (currentUsername && adminList.includes(currentUsername)) {
+                    const adminButtons = document.querySelectorAll('.admin-only');
+                    adminButtons.forEach(button => {
+                        button.style.display = 'block';
+                        button.style.visibility = 'visible';
+                    });
+                } else {
+                    const adminButtons = document.querySelectorAll('.admin-only');
+                    adminButtons.forEach(button => {
+                        button.style.display = 'none';
+                        button.style.visibility = 'hidden';
+                    });
+                }
+            }
+
+
+        });
+        
+        // Proteção contra inspeção (apenas para não-admins)
+        function isAdmin() {
+            const currentUser = localStorage.getItem('currentUser');
+            const admins = JSON.parse(localStorage.getItem('admins') || '[]');
+            return admins.some(admin => admin.username === currentUser);
+        }
+        
+        document.addEventListener('keydown', function(e) {
+            if (!isAdmin() && (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.shiftKey && e.key === 'C') || (e.ctrlKey && e.key === 'u'))) {
+                e.preventDefault();
+                showSecurityWarning();
+                return false;
+            }
+        });
+        
+        document.addEventListener('contextmenu', function(e) {
+            if (!isAdmin()) {
+                e.preventDefault();
+                showSecurityWarning();
+            }
+        });
+        
+        function showSecurityWarning() {
+            const warning = document.createElement('div');
+            warning.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: -400px;
+                width: 350px;
+                background: linear-gradient(145deg, rgba(0, 0, 0, 0.95), rgba(17, 17, 17, 0.9));
+                border: 2px solid var(--neon-cyan);
+                border-radius: 15px;
+                padding: 20px;
+                z-index: 99999;
+                backdrop-filter: blur(20px);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 255, 255, 0.3);
+                transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                overflow: hidden;
+                font-family: 'Orbitron', monospace;
+                color: #fff;
+            `;
+            
+            warning.innerHTML = `
+                <div style="
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    height: 3px;
+                    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-cyan));
+                    animation: topGlow 2s ease-in-out infinite;
+                "></div>
+                
+                <div style="display: flex; align-items: flex-start; gap: 15px; margin-top: 5px;">
+                    <div style="
+                        font-size: 2rem;
+                        color: var(--neon-cyan);
+                        animation: pulse 2s infinite;
+                        text-shadow: 0 0 20px var(--neon-cyan);
+                        flex-shrink: 0;
+                    ">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    
+                    <div style="flex: 1;">
+                        <h3 style="
+                            font-size: 1.1rem;
+                            margin: 0 0 8px 0;
+                            color: var(--neon-cyan);
+                            text-shadow: 0 0 10px var(--neon-cyan);
+                            font-weight: 700;
+                            text-transform: uppercase;
+                        ">SISTEMA PROTEGIDO</h3>
+                        
+                        <p style="
+                            font-size: 0.9rem;
+                            margin: 0 0 15px 0;
+                            color: rgba(255, 255, 255, 0.8);
+                            line-height: 1.4;
+                        ">Ferramentas de desenvolvedor bloqueadas. Apenas administradores têm acesso.</p>
+                        
+                        <div style="display: flex; gap: 8px;">
+                            <button onclick="closeSecurityWarning(this)" style="
+                                background: linear-gradient(45deg, var(--neon-cyan), rgba(0, 255, 255, 0.8));
+                                color: #000;
+                                border: none;
+                                padding: 8px 15px;
+                                border-radius: 8px;
+                                font-size: 0.8rem;
+                                font-weight: 700;
+                                cursor: pointer;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
+                                transition: all 0.3s ease;
+                                font-family: 'Orbitron', monospace;
+                                flex: 1;
+                            " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 15px rgba(0, 255, 255, 0.5)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button onclick="closeSecurityWarning(this)" style="
+                        background: none;
+                        border: none;
+                        color: rgba(255, 255, 255, 0.5);
+                        font-size: 1.2rem;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                    " onmouseover="this.style.background='rgba(0, 255, 255, 0.2)'; this.style.color='var(--neon-cyan)'; this.style.transform='scale(1.1)';" onmouseout="this.style.background='none'; this.style.color='rgba(255, 255, 255, 0.5)'; this.style.transform='scale(1)';">
+                        ×
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(warning);
+            
+            // Adicionar CSS para animações
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes securityAlert {
+                    0% { opacity: 0; transform: scale(0.8); }
+                    100% { opacity: 1; transform: scale(1); }
+                }
+                @keyframes pulse {
+                    0%, 100% { 
+                        transform: scale(1);
+                        text-shadow: 0 0 40px var(--neon-cyan);
+                    }
+                    50% { 
+                        transform: scale(1.1);
+                        text-shadow: 0 0 60px var(--neon-cyan), 0 0 80px var(--neon-cyan);
+                    }
+                }
+                @keyframes topGlow {
+                    0%, 100% { opacity: 0.8; }
+                    50% { opacity: 1; }
+                }
+                @keyframes rotate {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(warning);
+            
+            // Mostrar notificação
+            setTimeout(() => {
+                warning.style.right = '20px';
+            }, 100);
+            
+            // Auto-fechar após 8 segundos
+            setTimeout(() => {
+                if (document.body.contains(warning)) {
+                    closeSecurityWarning(warning);
+                }
+            }, 8000);
+        }
+        
+        function closeSecurityWarning(element) {
+            const warning = element.closest ? element.closest('div[style*="position: fixed"]') : element;
+            if (warning) {
+                warning.style.right = '-400px';
+                setTimeout(() => {
+                    if (document.body.contains(warning)) {
+                        document.body.removeChild(warning);
+                    }
+                }, 400);
+            }
+        }
+        
+        // Tela de carregamento
+        // Show loading screen immediately
+        showLoadingScreen();
+
+        window.addEventListener('beforeunload', function() {
+            showLoadingScreen();
+        });
+
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loadingScreen = document.getElementById('loadingScreen');
+                if (loadingScreen) {
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(function() {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }
+            }, 3000);
+        });
+        
+        function showLoadingScreen() {
+            const loadingScreen = document.createElement('div');
+            loadingScreen.id = 'loadingScreen';
+            loadingScreen.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #000000 100%);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                z-index: 999999;
+                transition: opacity 0.5s ease;
+                font-family: 'Orbitron', monospace;
+                color: #fff;
+            `;
+            
+            loadingScreen.innerHTML = `
+                <div style="
+                    width: 120px;
+                    height: 120px;
+                    border: 4px solid rgba(0, 255, 255, 0.3);
+                    border-top: 4px solid var(--neon-cyan);
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                    margin-bottom: 30px;
+                    box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+                "></div>
+                
+                <h2 style="
+                    font-size: 2rem;
+                    margin-bottom: 15px;
+                    color: var(--neon-cyan);
+                    text-shadow: 0 0 20px var(--neon-cyan);
+                    animation: pulse 2s ease-in-out infinite;
+                ">CARREGANDO</h2>
+                
+                <p style="
+                    font-size: 1rem;
+                    color: rgba(255, 255, 255, 0.7);
+                    text-align: center;
+                    max-width: 400px;
+                    line-height: 1.5;
+                ">Sincronizando com os servidores...</p>
+                
+                <div style="
+                    margin-top: 30px;
+                    display: flex;
+                    gap: 8px;
+                ">
+                    <div style="
+                        width: 8px;
+                        height: 8px;
+                        background: var(--neon-cyan);
+                        border-radius: 50%;
+                        animation: dot1 1.4s ease-in-out infinite;
+                        box-shadow: 0 0 10px var(--neon-cyan);
+                    "></div>
+                    <div style="
+                        width: 8px;
+                        height: 8px;
+                        background: var(--neon-cyan);
+                        border-radius: 50%;
+                        animation: dot2 1.4s ease-in-out infinite;
+                        box-shadow: 0 0 10px var(--neon-cyan);
+                    "></div>
+                    <div style="
+                        width: 8px;
+                        height: 8px;
+                        background: var(--neon-cyan);
+                        border-radius: 50%;
+                        animation: dot3 1.4s ease-in-out infinite;
+                        box-shadow: 0 0 10px var(--neon-cyan);
+                    "></div>
+                </div>
+            `;
+            
+            // Adicionar CSS das animações
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.7; }
+                }
+                @keyframes dot1 {
+                    0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+                    40% { transform: scale(1.2); opacity: 1; }
+                }
+                @keyframes dot2 {
+                    0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+                    40% { transform: scale(1.2); opacity: 1; }
+                }
+                @keyframes dot3 {
+                    0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+                    40% { transform: scale(1.2); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            document.body.appendChild(loadingScreen);
+        }
+    </script>
+</body>
+</html>

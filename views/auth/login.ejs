@@ -1,0 +1,49 @@
+<%- include('../partials/header', { title: 'Login' }) %>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-dark border-secondary">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-gamepad fa-3x text-primary mb-3"></i>
+                        <h2 class="card-title">Login</h2>
+                    </div>
+
+                    <% if (error) { %>
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i><%= error %>
+                        </div>
+                    <% } %>
+
+                    <form action="/auth/login" method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Usuário ou Email</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" 
+                                   id="username" name="username" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Senha</label>
+                            <input type="password" class="form-control bg-dark text-light border-secondary" 
+                                   id="password" name="password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 mb-3">
+                            <i class="fas fa-sign-in-alt me-2"></i>Entrar
+                        </button>
+                    </form>
+
+                    <div class="text-center">
+                        <p class="text-muted">Não tem uma conta?</p>
+                        <a href="/auth/register" class="btn btn-outline-primary">
+                            Criar Conta
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

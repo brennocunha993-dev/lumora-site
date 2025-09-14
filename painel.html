@@ -1,0 +1,1970 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Lumora</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-cyan: #00ffff;
+            --neon-purple: #8a2be2;
+            --neon-pink: #ff1493;
+            --neon-green: #39ff14;
+            --neon-orange: #ff6600;
+            --dark-bg: #000000;
+            --darker-bg: #0a0a0a;
+            --card-bg: #111111;
+            --sidebar-width: 280px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #000000 100%);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.95), rgba(17, 17, 17, 0.9));
+            border-right: 2px solid var(--neon-cyan);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .sidebar-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 20px var(--neon-cyan);
+            animation: logoGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            0% { text-shadow: 0 0 10px var(--neon-cyan); }
+            100% { text-shadow: 0 0 30px var(--neon-cyan); }
+        }
+
+        .sidebar-subtitle {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 30px;
+        }
+
+        .nav-section-title {
+            padding: 0 20px 10px;
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 15px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: var(--neon-cyan);
+            background: rgba(0, 255, 255, 0.1);
+            border-left-color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .nav-item i {
+            width: 20px;
+            margin-right: 12px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(17, 17, 17, 0.6));
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            animation: rotate 8s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .page-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            margin-top: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Cards */
+        .admin-card {
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.9), rgba(17, 17, 17, 0.8));
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, transparent, var(--neon-cyan), transparent);
+            border-radius: 15px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .admin-card:hover::before {
+            opacity: 0.3;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #000;
+            margin-right: 15px;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--neon-cyan);
+        }
+
+        .card-description {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(17, 17, 17, 0.6));
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 255, 255, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 20px var(--neon-cyan);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        /* Buttons */
+        .admin-btn {
+            background: linear-gradient(45deg, var(--neon-cyan), rgba(0, 255, 255, 0.8));
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .admin-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        /* Security Screen */
+        .security-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #000000 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 999999;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .security-icon {
+            font-size: 5rem;
+            color: #ff0040;
+            text-shadow: 0 0 30px #ff0040;
+            animation: securityPulse 2s ease-in-out infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes securityPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .security-title {
+            font-size: 2.5rem;
+            color: #ff0040;
+            text-shadow: 0 0 20px #ff0040;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .security-message {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .security-btn {
+            background: linear-gradient(45deg, #ff0040, #cc0033);
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .security-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #ff0040;
+        }
+
+        .hidden { display: none !important; }
+        .admin-btn.danger {
+            background: linear-gradient(45deg, #ff0040, #ff4060);
+            color: #fff;
+        }
+
+        .admin-btn.warning {
+            background: linear-gradient(45deg, var(--neon-orange), #ff8800);
+            color: #000;
+        }
+
+        .admin-btn.success {
+            background: linear-gradient(45deg, var(--neon-green), #00ff80);
+            color: #000;
+        }
+
+        /* Users Table */
+        .users-table {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: linear-gradient(90deg, rgba(0, 255, 255, 0.2), rgba(138, 43, 226, 0.2));
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr 2fr 2fr 1fr 1fr;
+            gap: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            color: var(--neon-cyan);
+        }
+
+        .table-row {
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr 2fr 2fr 1fr 1fr;
+            gap: 15px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            align-items: center;
+        }
+
+        .table-row:hover {
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: 700;
+        }
+
+        .user-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-online {
+            background: rgba(57, 255, 20, 0.2);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+        }
+
+        .status-offline {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn-small {
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn-small:hover {
+            background: var(--neon-cyan);
+            color: #000;
+        }
+
+        .action-btn-small.danger {
+            background: rgba(255, 0, 64, 0.2);
+            border-color: #ff0040;
+            color: #ff0040;
+        }
+
+        .action-btn-small.danger:hover {
+            background: #ff0040;
+            color: #fff;
+        }
+
+        /* Promote Modal */
+        .promote-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.95), rgba(17, 17, 17, 0.9));
+            border: 2px solid var(--neon-cyan);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .modal-header h3 {
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', monospace;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--neon-cyan);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #ff0040;
+            transform: scale(1.2);
+        }
+
+        .form-select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            color: #fff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .permissions-section {
+            margin: 20px 0;
+        }
+
+        .permissions-section h4 {
+            color: var(--neon-cyan);
+            margin-bottom: 15px;
+        }
+
+        .permissions-section label {
+            display: block;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+        .permissions-section input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .modal-footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 255, 255, 0.3);
+            text-align: right;
+        }
+
+        .admin-btn.danger {
+            background: linear-gradient(45deg, #ff0040, #ff4060);
+            color: #fff;
+        }
+
+        .admin-btn.warning {
+            background: linear-gradient(45deg, var(--neon-orange), #ff8800);
+            color: #000;
+        }
+
+        .admin-btn.success {
+            background: linear-gradient(45deg, var(--neon-green), #00ff80);
+            color: #000;
+        }
+
+        /* Console */
+        .console {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--neon-green);
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            color: var(--neon-green);
+            height: 300px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .console::before {
+            content: '> SISTEMA ONLINE';
+            display: block;
+            color: var(--neon-cyan);
+            margin-bottom: 10px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .console-line {
+            margin: 5px 0;
+            animation: typewriter 0.5s ease-in;
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: var(--neon-cyan);
+            color: #000;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Security Screen -->
+    <div id="securityScreen" class="security-screen">
+        <div class="security-icon">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <h1 class="security-title">ACESSO NEGADO</h1>
+        <p class="security-message">
+            Esta área é restrita apenas para administradores autorizados.<br>
+            Tentativas de acesso não autorizado são monitoradas e registradas.
+        </p>
+        <button class="security-btn" onclick="redirectToHome()">
+            <i class="fas fa-home me-2"></i>VOLTAR AO INÍCIO
+        </button>
+    </div>
+
+    <!-- Admin Content (Hidden by default) -->
+    <div id="adminContent" class="hidden">
+    <div id="particles-js"></div>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">LUMORA</div>
+            <div class="sidebar-subtitle">Painel Administrativo</div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Principal</div>
+                <a href="#" class="nav-item active" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('stats')">
+                    <i class="fas fa-chart-bar"></i> Estatísticas
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Gerenciamento</div>
+                <a href="#" class="nav-item" onclick="showSection('users')">
+                    <i class="fas fa-users"></i> Usuários
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('admins')">
+                    <i class="fas fa-user-shield"></i> Administradores
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('games')">
+                    <i class="fas fa-gamepad"></i> Jogos
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Sistema</div>
+                <a href="#" class="nav-item" onclick="showSection('console')">
+                    <i class="fas fa-terminal"></i> Console
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('logs')">
+                    <i class="fas fa-file-alt"></i> Logs
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('tickets')">
+                    <i class="fas fa-ticket-alt"></i> Tickets
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('config')">
+                    <i class="fas fa-cog"></i> Configurações
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('database')">
+                    <i class="fas fa-database"></i> Banco de Dados
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Segurança</div>
+                <a href="#" class="nav-item" onclick="showSection('security')">
+                    <i class="fas fa-shield-alt"></i> Segurança
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('backup')">
+                    <i class="fas fa-save"></i> Backup
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">PAINEL ADMINISTRATIVO</h1>
+            <p class="page-subtitle">Sistema de Controle Lumora v2.0</p>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="content-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalUsers">0</div>
+                    <div class="stat-label">Usuários Registrados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalGamesAdmin">0</div>
+                    <div class="stat-label">Jogos Criados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalAdmins">0</div>
+                    <div class="stat-label">Administradores</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalTickets">0</div>
+                    <div class="stat-label">Tickets Abertos</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="admin-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div>
+                                <div class="card-title">Gerenciar Usuários</div>
+                            </div>
+                        </div>
+                        <div class="card-description">
+                            Visualize, edite e gerencie contas de usuários da plataforma.
+                        </div>
+                        <button class="admin-btn" onclick="showSection('users')">Acessar</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="admin-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-gamepad"></i>
+                            </div>
+                            <div>
+                                <div class="card-title">Biblioteca de Jogos</div>
+                            </div>
+                        </div>
+                        <div class="card-description">
+                            Adicione, remova e configure jogos disponíveis na plataforma.
+                        </div>
+                        <button class="admin-btn" onclick="showSection('games')">Gerenciar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Section -->
+        <div id="users-section" class="content-section" style="display: none;">
+            <div class="admin-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Gerenciamento de Usuários</div>
+                    </div>
+                </div>
+                <div class="card-description">
+                    Controle total sobre contas de usuários registrados na plataforma.
+                </div>
+                <button class="admin-btn" onclick="loadUsers()">Listar Usuários</button>
+                <button class="admin-btn warning">Usuários Banidos</button>
+                <button class="admin-btn success">Adicionar Usuário</button>
+                <button class="admin-btn danger">Limpar Inativos</button>
+                
+                <div class="users-table" id="usersTable" style="margin-top: 30px;">
+                    <!-- Tabela de usuários será carregada aqui -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Console Section -->
+        <div id="console-section" class="content-section" style="display: none;">
+            <div class="admin-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-terminal"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Console do Sistema</div>
+                    </div>
+                </div>
+                <div class="console" id="console">
+                    <div class="console-line">[INFO] Sistema iniciado com sucesso</div>
+                    <div class="console-line">[INFO] Conectado ao banco de dados</div>
+                    <div class="console-line">[INFO] 1247 usuários online</div>
+                    <div class="console-line">[WARN] Uso de CPU: 45%</div>
+                    <div class="console-line">[INFO] Backup automático concluído</div>
+                </div>
+                <button class="admin-btn" onclick="clearConsole()">Limpar Console</button>
+                <button class="admin-btn warning" onclick="addConsoleLog()">Teste Log</button>
+            </div>
+        </div>
+
+        <!-- Admins Section -->
+        <div id="admins-section" class="content-section" style="display: none;">
+            <div class="admin-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Gerenciar Administradores</div>
+                    </div>
+                </div>
+                <div class="card-description">
+                    Promova usuários para administradores e gerencie permissões.
+                </div>
+                <button class="admin-btn" onclick="loadAdmins()">Listar Administradores</button>
+                <button class="admin-btn success" onclick="showPromoteUser()">Promover Usuário</button>
+                <button class="admin-btn warning">Permissões</button>
+                
+                <div class="admins-table" id="adminsTable" style="margin-top: 30px;">
+                    <!-- Tabela de administradores será carregada aqui -->
+                </div>
+                
+                <!-- Modal para promover usuário -->
+                <div id="promoteModal" class="promote-modal" style="display: none;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Promover Usuário a Administrador</h3>
+                            <button onclick="closePromoteModal()" class="close-btn">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <select id="userSelect" class="form-select">
+                                <option value="">Selecione um usuário...</option>
+                            </select>
+                            <div class="permissions-section">
+                                <h4>Permissões:</h4>
+                                <label><input type="checkbox" checked> Gerenciar Usuários</label>
+                                <label><input type="checkbox" checked> Gerenciar Jogos</label>
+                                <label><input type="checkbox"> Acesso Total</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="admin-btn" onclick="promoteUser()">Promover</button>
+                            <button class="admin-btn danger" onclick="closePromoteModal()">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Games Section -->
+        <div id="games-section" class="content-section" style="display: none;">
+            <div class="admin-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Gerenciar Jogos</div>
+                    </div>
+                </div>
+                <div class="card-description">
+                    Visualize, edite e remova jogos criados na plataforma.
+                </div>
+                
+                <!-- Barra de pesquisa -->
+                <div style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
+                    <div style="position: relative; flex: 1;">
+                        <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--neon-cyan); font-size: 1.1rem;"></i>
+                        <input type="text" id="gameSearchInput" placeholder="Buscar jogos por nome, desenvolvedor ou categoria..." style="
+                            width: 100%;
+                            background: rgba(0, 0, 0, 0.8);
+                            border: 2px solid rgba(0, 255, 255, 0.4);
+                            color: #fff;
+                            padding: 15px 15px 15px 50px;
+                            border-radius: 12px;
+                            font-size: 1rem;
+                            transition: all 0.3s ease;
+                        " oninput="searchGames()" onfocus="this.style.borderColor='var(--neon-cyan)'; this.style.boxShadow='0 0 15px rgba(0, 255, 255, 0.3)';" onblur="this.style.borderColor='rgba(0, 255, 255, 0.4)'; this.style.boxShadow='none';">
+                    </div>
+                    <button class="admin-btn" onclick="clearSearch()">Limpar</button>
+                </div>
+                
+                <button class="admin-btn" onclick="loadGames()">Listar Jogos</button>
+                <button class="admin-btn success" onclick="window.open('jogos.html', '_blank')">Criar Novo Jogo</button>
+                <button class="admin-btn danger" onclick="clearAllGames()">Limpar Todos</button>
+                
+                <div class="games-table" id="gamesTable" style="margin-top: 30px;">
+                    <!-- Tabela de jogos será carregada aqui -->
+                </div>
+                
+
+            </div>
+        </div>
+
+        <!-- Tickets Section -->
+        <div id="tickets-section" class="content-section" style="display: none;">
+            <div class="admin-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Tickets de Suporte</div>
+                    </div>
+                </div>
+                <div class="card-description">
+                    Gerencie e responda aos tickets de suporte dos usuários.
+                </div>
+                <button class="admin-btn" onclick="loadTickets()">Carregar Tickets</button>
+                <button class="admin-btn warning" onclick="filterTickets('aberto')">Apenas Abertos</button>
+                <button class="admin-btn success" onclick="filterTickets('resolvido')">Resolvidos</button>
+                
+                <div class="tickets-table" id="ticketsTable" style="margin-top: 30px;">
+                    <!-- Tabela de tickets será carregada aqui -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div id="stats-section" class="content-section" style="display: none;">
+            <div class="admin-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Estatísticas Detalhadas</div>
+                    </div>
+                </div>
+                <div class="card-description">
+                    Análise completa de performance e uso da plataforma.
+                </div>
+                <button class="admin-btn">Relatório Mensal</button>
+                <button class="admin-btn">Exportar Dados</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // Particles
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 50, density: { enable: true, value_area: 800 } },
+                color: { value: ['#00ffff', '#8a2be2', '#ff1493'] },
+                shape: { type: 'circle' },
+                opacity: { value: 0.3, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#00ffff',
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: true,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+
+        // Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.style.display = 'none');
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').style.display = 'block';
+            
+            // Update active nav item
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Auto-load content when entering sections
+            if (sectionName === 'users') {
+                setTimeout(loadUsers, 100);
+            } else if (sectionName === 'admins') {
+                setTimeout(loadAdmins, 100);
+            } else if (sectionName === 'games') {
+                setTimeout(loadGames, 100);
+            } else if (sectionName === 'tickets') {
+                setTimeout(loadTickets, 100);
+            }
+        }
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Console functions
+        function clearConsole() {
+            const console = document.getElementById('console');
+            console.innerHTML = '';
+            setTimeout(() => {
+                console.innerHTML = '<div class="console-line">[INFO] Console limpo</div>';
+            }, 500);
+        }
+
+        function addConsoleLog() {
+            const console = document.getElementById('console');
+            const timestamp = new Date().toLocaleTimeString();
+            const newLog = document.createElement('div');
+            newLog.className = 'console-line';
+            newLog.textContent = `[${timestamp}] [TEST] Log de teste adicionado`;
+            console.appendChild(newLog);
+            console.scrollTop = console.scrollHeight;
+        }
+
+        // Users functions
+        function loadUsers() {
+            const usersTable = document.getElementById('usersTable');
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const currentUser = localStorage.getItem('currentUser');
+            
+            if (registeredUsers.length === 0) {
+                usersTable.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: rgba(255, 255, 255, 0.6);">
+                        <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                        <h3>Nenhum usuário encontrado</h3>
+                        <p>Não há usuários registrados na plataforma.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let tableHTML = `
+                <div class="table-header">
+                    <div>Avatar</div>
+                    <div>Usuário</div>
+                    <div>Email</div>
+                    <div>Status</div>
+                    <div>Ações</div>
+                </div>
+            `;
+            
+            registeredUsers.forEach((user, index) => {
+                const isOnline = user.username === currentUser; // Status real baseado no usuário logado
+                const avatar = user.username.charAt(0).toUpperCase();
+                
+                tableHTML += `
+                    <div class="table-row">
+                        <div>
+                            <div class="user-avatar">${avatar}</div>
+                        </div>
+                        <div>
+                            <strong>${user.username}</strong><br>
+                            <small style="color: rgba(255, 255, 255, 0.6);">
+                                Desde: ${user.registrationDate || 'N/A'}
+                            </small>
+                        </div>
+                        <div>${user.email}</div>
+                        <div>
+                            <span class="user-status ${isOnline ? 'status-online' : 'status-offline'}">
+                                ${isOnline ? 'Online' : 'Offline'}
+                            </span>
+                        </div>
+                        <div class="user-actions">
+                            <button class="action-btn-small" onclick="editUser('${user.username}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn-small danger" onclick="deleteUser('${user.username}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            usersTable.innerHTML = tableHTML;
+        }
+        
+        function editUser(username) {
+            alert(`Editar usuário: ${username}`);
+        }
+        
+        function deleteUser(username) {
+            if (confirm(`Tem certeza que deseja excluir o usuário ${username}?`)) {
+                let users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                users = users.filter(user => user.username !== username);
+                localStorage.setItem('registeredUsers', JSON.stringify(users));
+                loadUsers(); // Recarregar a tabela
+                alert(`Usuário ${username} excluído com sucesso!`);
+            }
+        }
+
+        // Admins functions
+        function loadAdmins() {
+            const adminsTable = document.getElementById('adminsTable');
+            const adminList = JSON.parse(localStorage.getItem('adminList') || '[]');
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const currentUser = localStorage.getItem('currentUser');
+            
+            if (adminList.length === 0) {
+                adminsTable.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: rgba(255, 255, 255, 0.6);">
+                        <i class="fas fa-user-shield" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                        <h3>Nenhum administrador encontrado</h3>
+                        <p>Não há administradores cadastrados.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let tableHTML = `
+                <div class="table-header">
+                    <div>Avatar</div>
+                    <div>Administrador</div>
+                    <div>Permissões</div>
+                    <div>Status</div>
+                    <div>Ações</div>
+                </div>
+            `;
+            
+            adminList.forEach((adminUsername, index) => {
+                const isOnline = adminUsername === currentUser;
+                const avatar = adminUsername.charAt(0).toUpperCase();
+                const userInfo = registeredUsers.find(u => u.username === adminUsername);
+                
+                tableHTML += `
+                    <div class="table-row">
+                        <div>
+                            <div class="user-avatar" style="background: linear-gradient(45deg, #ff6600, #ff8800);">${avatar}</div>
+                        </div>
+                        <div>
+                            <strong>${adminUsername}</strong><br>
+                            <small style="color: rgba(255, 255, 255, 0.6);">
+                                Email: ${userInfo?.email || 'N/A'}
+                            </small>
+                        </div>
+                        <div>
+                            <span style="color: var(--neon-orange); font-size: 0.9rem;">
+                                Administrador
+                            </span>
+                        </div>
+                        <div>
+                            <span class="user-status ${isOnline ? 'status-online' : 'status-offline'}">
+                                ${isOnline ? 'Online' : 'Offline'}
+                            </span>
+                        </div>
+                        <div class="user-actions">
+                            <button class="action-btn-small warning" onclick="editAdmin('${adminUsername}')">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            <button class="action-btn-small danger" onclick="demoteAdmin('${adminUsername}')">
+                                <i class="fas fa-user-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            adminsTable.innerHTML = tableHTML;
+        }
+
+        function showPromoteUser() {
+            const modal = document.getElementById('promoteModal');
+            const userSelect = document.getElementById('userSelect');
+            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const adminList = JSON.parse(localStorage.getItem('adminList') || '[]');
+            
+            // Limpar opções
+            userSelect.innerHTML = '<option value="">Selecione um usuário...</option>';
+            
+            // Adicionar usuários que não são admin
+            users.forEach(user => {
+                if (!adminList.includes(user.username)) {
+                    userSelect.innerHTML += `<option value="${user.username}">${user.username}</option>`;
+                }
+            });
+            
+            modal.style.display = 'flex';
+        }
+
+        function closePromoteModal() {
+            document.getElementById('promoteModal').style.display = 'none';
+        }
+
+        function promoteUser() {
+            const userSelect = document.getElementById('userSelect');
+            const selectedUser = userSelect.value;
+            
+            if (!selectedUser) {
+                alert('Selecione um usuário para promover!');
+                return;
+            }
+            
+            const adminList = JSON.parse(localStorage.getItem('adminList') || '[]');
+            adminList.push(selectedUser);
+            localStorage.setItem('adminList', JSON.stringify(adminList));
+            
+            closePromoteModal();
+            loadAdmins();
+            alert(`${selectedUser} foi promovido a administrador!`);
+        }
+
+        function editAdmin(username) {
+            alert(`Editar permissões do admin: ${username}`);
+        }
+
+        function demoteAdmin(username) {
+            if (confirm(`Tem certeza que deseja remover ${username} dos administradores?`)) {
+                let adminList = JSON.parse(localStorage.getItem('adminList') || '[]');
+                adminList = adminList.filter(admin => admin !== username);
+                localStorage.setItem('adminList', JSON.stringify(adminList));
+                loadAdmins();
+                alert(`${username} foi removido dos administradores!`);
+            }
+        }
+
+        // Games functions
+        function loadGames() {
+            const customGames = JSON.parse(localStorage.getItem('customGames') || '[]');
+            displayGames(customGames);
+        }
+        
+        function editGame(index) {
+            const games = JSON.parse(localStorage.getItem('customGames') || '[]');
+            const game = games[index];
+            
+            const editScreen = document.createElement('div');
+            editScreen.id = 'editGameScreen';
+            editScreen.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: linear-gradient(135deg, rgba(0, 0, 0, 0.98), rgba(17, 17, 17, 0.95));
+                z-index: 10000;
+                overflow-y: auto;
+                color: #fff;
+                font-family: 'Rajdhani', sans-serif;
+            `;
+            
+            editScreen.innerHTML = `
+                <div style="padding: 40px; max-width: 1200px; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                        <h1 style="font-family: 'Orbitron', monospace; font-size: 3rem; color: var(--neon-cyan); text-shadow: 0 0 20px var(--neon-cyan);">EDITAR JOGO</h1>
+                        <button onclick="closeEditScreen()" style="background: rgba(0, 0, 0, 0.9); border: 2px solid var(--neon-cyan); color: var(--neon-cyan); width: 60px; height: 60px; border-radius: 50%; font-size: 1.5rem; cursor: pointer;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px;">
+                        <div>
+                            <label style="color: var(--neon-cyan); margin-bottom: 10px; display: block; font-weight: 700;">Nome do Jogo:</label>
+                            <input type="text" id="editGameName" value="${game.name}" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 2px solid rgba(0, 255, 255, 0.4); color: #fff; padding: 15px; border-radius: 10px; font-size: 1.1rem;">
+                        </div>
+                        <div>
+                            <label style="color: var(--neon-cyan); margin-bottom: 10px; display: block; font-weight: 700;">Desenvolvedor:</label>
+                            <input type="text" id="editGameDeveloper" value="${game.developer || ''}" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 2px solid rgba(0, 255, 255, 0.4); color: #fff; padding: 15px; border-radius: 10px; font-size: 1.1rem;">
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                        <div>
+                            <label style="color: var(--neon-cyan); margin-bottom: 10px; display: block; font-weight: 700;">Categorias:</label>
+                            <div style="background: rgba(0, 0, 0, 0.8); border: 2px solid rgba(0, 255, 255, 0.4); border-radius: 10px; padding: 15px; max-height: 200px; overflow-y: auto;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="acao" ${(game.categories && game.categories.includes('acao')) || game.category === 'acao' ? 'checked' : ''} style="margin-right: 8px;"> Ação</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="aventura" ${(game.categories && game.categories.includes('aventura')) || game.category === 'aventura' ? 'checked' : ''} style="margin-right: 8px;"> Aventura</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="rpg" ${(game.categories && game.categories.includes('rpg')) || game.category === 'rpg' ? 'checked' : ''} style="margin-right: 8px;"> RPG</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="estrategia" ${(game.categories && game.categories.includes('estrategia')) || game.category === 'estrategia' ? 'checked' : ''} style="margin-right: 8px;"> Estratégia</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="corrida" ${(game.categories && game.categories.includes('corrida')) || game.category === 'corrida' ? 'checked' : ''} style="margin-right: 8px;"> Corrida</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="esporte" ${(game.categories && game.categories.includes('esporte')) || game.category === 'esporte' ? 'checked' : ''} style="margin-right: 8px;"> Esporte</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="puzzle" ${(game.categories && game.categories.includes('puzzle')) || game.category === 'puzzle' ? 'checked' : ''} style="margin-right: 8px;"> Puzzle</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="tiro" ${(game.categories && game.categories.includes('tiro')) || game.category === 'tiro' ? 'checked' : ''} style="margin-right: 8px;"> Tiro</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="terror" ${(game.categories && game.categories.includes('terror')) || game.category === 'terror' ? 'checked' : ''} style="margin-right: 8px;"> Terror</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="simulacao" ${(game.categories && game.categories.includes('simulacao')) || game.category === 'simulacao' ? 'checked' : ''} style="margin-right: 8px;"> Simulação</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="plataforma" ${(game.categories && game.categories.includes('plataforma')) || game.category === 'plataforma' ? 'checked' : ''} style="margin-right: 8px;"> Plataforma</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="luta" ${(game.categories && game.categories.includes('luta')) || game.category === 'luta' ? 'checked' : ''} style="margin-right: 8px;"> Luta</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="musical" ${(game.categories && game.categories.includes('musical')) || game.category === 'musical' ? 'checked' : ''} style="margin-right: 8px;"> Musical</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="indie" ${(game.categories && game.categories.includes('indie')) || game.category === 'indie' ? 'checked' : ''} style="margin-right: 8px;"> Indie</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="casual" ${(game.categories && game.categories.includes('casual')) || game.category === 'casual' ? 'checked' : ''} style="margin-right: 8px;"> Casual</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="mmo" ${(game.categories && game.categories.includes('mmo')) || game.category === 'mmo' ? 'checked' : ''} style="margin-right: 8px;"> MMO</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="survival" ${(game.categories && game.categories.includes('survival')) || game.category === 'survival' ? 'checked' : ''} style="margin-right: 8px;"> Sobrevivência</label>
+                                    <label style="color: #fff; cursor: pointer; display: block;"><input type="checkbox" name="editCategories" value="sandbox" ${(game.categories && game.categories.includes('sandbox')) || game.category === 'sandbox' ? 'checked' : ''} style="margin-right: 8px;"> Sandbox</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label style="color: var(--neon-cyan); margin-bottom: 10px; display: block; font-weight: 700;">Avaliação:</label>
+                            <input type="number" id="editGameRating" value="${game.rating}" min="1" max="5" step="0.1" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 2px solid rgba(0, 255, 255, 0.4); color: #fff; padding: 15px; border-radius: 10px; font-size: 1.1rem;">
+                        </div>
+                        <div>
+                            <label style="color: var(--neon-cyan); margin-bottom: 10px; display: block; font-weight: 700;">Data de Lançamento:</label>
+                            <input type="date" id="editGameReleaseDate" value="${game.releaseDate || ''}" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 2px solid rgba(0, 255, 255, 0.4); color: #fff; padding: 15px; border-radius: 10px; font-size: 1.1rem;">
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                        <div>
+                            <label style="color: var(--neon-cyan); margin-bottom: 10px; display: block; font-weight: 700;">Jogadores:</label>
+                            <input type="text" id="editGamePlayers" value="${game.players || ''}" placeholder="1-4 Cooperativo" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 2px solid rgba(0, 255, 255, 0.4); color: #fff; padding: 15px; border-radius: 10px; font-size: 1.1rem;">
+                        </div>
+                        <div>
+                            <label style="color: var(--neon-cyan); margin-bottom: 10px; display: block; font-weight: 700;">Idiomas:</label>
+                            <input type="text" id="editGameLanguages" value="${game.languages || ''}" placeholder="Português, Inglês, Espanhol" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 2px solid rgba(0, 255, 255, 0.4); color: #fff; padding: 15px; border-radius: 10px; font-size: 1.1rem;">
+                        </div>
+                        <div>
+                            <label style="color: var(--neon-cyan); margin-bottom: 10px; display: block; font-weight: 700;">Classificação Etária:</label>
+                            <input type="text" id="editGameAgeRating" value="${game.ageRating || ''}" placeholder="18+ (Violência, Terror)" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 2px solid rgba(0, 255, 255, 0.4); color: #fff; padding: 15px; border-radius: 10px; font-size: 1.1rem;">
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 30px;">
+                        <label style="color: var(--neon-cyan); margin-bottom: 10px; display: block; font-weight: 700;">Características (separadas por vírgula):</label>
+                        <textarea id="editGameFeatures" rows="3" placeholder="Multijogador Online, Cooperativo, Terror Psicológico, Primeira Pessoa, Sobrevivência, Atmosférico" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 2px solid rgba(0, 255, 255, 0.4); color: #fff; padding: 15px; border-radius: 10px; font-size: 1.1rem; resize: vertical;">${game.features ? game.features.join(', ') : ''}</textarea>
+                    </div>
+                    
+                    <div style="margin-bottom: 40px;">
+                        <label style="color: var(--neon-cyan); margin-bottom: 10px; display: block; font-weight: 700;">Descrição:</label>
+                        <textarea id="editGameDescription" rows="4" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 2px solid rgba(0, 255, 255, 0.4); color: #fff; padding: 15px; border-radius: 10px; font-size: 1.1rem; resize: vertical;">${game.description || ''}</textarea>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 50px;">
+                        <div>
+                            <label style="color: var(--neon-cyan); margin-bottom: 10px; display: block; font-weight: 700;">URL da Imagem:</label>
+                            <input type="url" id="editGameImageUrl" value="${game.imageUrl}" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 2px solid rgba(0, 255, 255, 0.4); color: #fff; padding: 15px; border-radius: 10px; font-size: 1.1rem;">
+                        </div>
+                        <div>
+                            <label style="color: var(--neon-cyan); margin-bottom: 10px; display: block; font-weight: 700;">URL do Jogo:</label>
+                            <input type="url" id="editGameUrl" value="${game.gameUrl}" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 2px solid rgba(0, 255, 255, 0.4); color: #fff; padding: 15px; border-radius: 10px; font-size: 1.1rem;">
+                        </div>
+                    </div>
+                    
+                    <h2 style="color: var(--neon-cyan); margin-bottom: 30px; text-align: center; font-family: 'Orbitron', monospace; font-size: 2rem; text-shadow: 0 0 15px var(--neon-cyan);">REQUISITOS DO SISTEMA</h2>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-bottom: 50px;">
+                        <div style="background: linear-gradient(145deg, rgba(0, 0, 0, 0.9), rgba(17, 17, 17, 0.8)); border: 2px solid rgba(255, 165, 0, 0.3); border-radius: 20px; padding: 30px;">
+                            <h3 style="color: var(--neon-orange); margin-bottom: 25px; text-align: center; font-size: 1.5rem; text-shadow: 0 0 10px var(--neon-orange);">MÍNIMOS</h3>
+                            <div style="margin-bottom: 20px;">
+                                <label style="color: rgba(255, 255, 255, 0.8); margin-bottom: 8px; display: block;">Sistema Operacional:</label>
+                                <input type="text" id="editMinOS" value="${game.systemRequirements?.minimum?.os || ''}" placeholder="Windows 10 64-bit" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 1px solid rgba(255, 165, 0, 0.4); color: #fff; padding: 12px; border-radius: 8px;">
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="color: rgba(255, 255, 255, 0.8); margin-bottom: 8px; display: block;">Processador:</label>
+                                <input type="text" id="editMinProcessor" value="${game.systemRequirements?.minimum?.processor || ''}" placeholder="Intel i5-4590 / AMD FX 8350" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 1px solid rgba(255, 165, 0, 0.4); color: #fff; padding: 12px; border-radius: 8px;">
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="color: rgba(255, 255, 255, 0.8); margin-bottom: 8px; display: block;">Memória:</label>
+                                <input type="text" id="editMinMemory" value="${game.systemRequirements?.minimum?.memory || ''}" placeholder="8 GB RAM" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 1px solid rgba(255, 165, 0, 0.4); color: #fff; padding: 12px; border-radius: 8px;">
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="color: rgba(255, 255, 255, 0.8); margin-bottom: 8px; display: block;">Placa de Vídeo:</label>
+                                <input type="text" id="editMinGraphics" value="${game.systemRequirements?.minimum?.graphics || ''}" placeholder="GTX 1060 / RX 580" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 1px solid rgba(255, 165, 0, 0.4); color: #fff; padding: 12px; border-radius: 8px;">
+                            </div>
+                            <div>
+                                <label style="color: rgba(255, 255, 255, 0.8); margin-bottom: 8px; display: block;">Armazenamento:</label>
+                                <input type="text" id="editMinStorage" value="${game.systemRequirements?.minimum?.storage || ''}" placeholder="15 GB disponíveis" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 1px solid rgba(255, 165, 0, 0.4); color: #fff; padding: 12px; border-radius: 8px;">
+                            </div>
+                        </div>
+                        
+                        <div style="background: linear-gradient(145deg, rgba(0, 0, 0, 0.9), rgba(17, 17, 17, 0.8)); border: 2px solid rgba(57, 255, 20, 0.3); border-radius: 20px; padding: 30px;">
+                            <h3 style="color: var(--neon-green); margin-bottom: 25px; text-align: center; font-size: 1.5rem; text-shadow: 0 0 10px var(--neon-green);">RECOMENDADOS</h3>
+                            <div style="margin-bottom: 20px;">
+                                <label style="color: rgba(255, 255, 255, 0.8); margin-bottom: 8px; display: block;">Sistema Operacional:</label>
+                                <input type="text" id="editRecOS" value="${game.systemRequirements?.recommended?.os || ''}" placeholder="Windows 11 64-bit" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 1px solid rgba(57, 255, 20, 0.4); color: #fff; padding: 12px; border-radius: 8px;">
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="color: rgba(255, 255, 255, 0.8); margin-bottom: 8px; display: block;">Processador:</label>
+                                <input type="text" id="editRecProcessor" value="${game.systemRequirements?.recommended?.processor || ''}" placeholder="Intel i7-8700K / AMD Ryzen 5 3600" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 1px solid rgba(57, 255, 20, 0.4); color: #fff; padding: 12px; border-radius: 8px;">
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="color: rgba(255, 255, 255, 0.8); margin-bottom: 8px; display: block;">Memória:</label>
+                                <input type="text" id="editRecMemory" value="${game.systemRequirements?.recommended?.memory || ''}" placeholder="16 GB RAM" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 1px solid rgba(57, 255, 20, 0.4); color: #fff; padding: 12px; border-radius: 8px;">
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="color: rgba(255, 255, 255, 0.8); margin-bottom: 8px; display: block;">Placa de Vídeo:</label>
+                                <input type="text" id="editRecGraphics" value="${game.systemRequirements?.recommended?.graphics || ''}" placeholder="RTX 3070 / RX 6700 XT" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 1px solid rgba(57, 255, 20, 0.4); color: #fff; padding: 12px; border-radius: 8px;">
+                            </div>
+                            <div>
+                                <label style="color: rgba(255, 255, 255, 0.8); margin-bottom: 8px; display: block;">Armazenamento:</label>
+                                <input type="text" id="editRecStorage" value="${game.systemRequirements?.recommended?.storage || ''}" placeholder="15 GB SSD" style="width: 100%; background: rgba(0, 0, 0, 0.8); border: 1px solid rgba(57, 255, 20, 0.4); color: #fff; padding: 12px; border-radius: 8px;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 40px;">
+                        <button onclick="saveGameChanges(${index})" style="background: linear-gradient(45deg, var(--neon-green), rgba(57, 255, 20, 0.8)); color: #000; border: none; padding: 20px 50px; border-radius: 15px; font-weight: 900; font-size: 1.2rem; text-transform: uppercase; margin-right: 20px; cursor: pointer;">
+                            <i class="fas fa-save me-2"></i>SALVAR ALTERAÇÕES
+                        </button>
+                        <button onclick="closeEditScreen()" style="background: linear-gradient(45deg, #ff0040, #ff4060); color: #fff; border: none; padding: 20px 50px; border-radius: 15px; font-weight: 900; font-size: 1.2rem; text-transform: uppercase; cursor: pointer;">
+                            <i class="fas fa-times me-2"></i>CANCELAR
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(editScreen);
+            
+            window.closeEditScreen = function() {
+                document.body.removeChild(editScreen);
+            }
+        }
+        
+        function viewGame(gameUrl) {
+            window.open(gameUrl, '_blank');
+        }
+        
+        function deleteGame(index) {
+            const games = JSON.parse(localStorage.getItem('customGames') || '[]');
+            const gameName = games[index].name;
+            
+            if (confirm(`Tem certeza que deseja excluir o jogo "${gameName}"?`)) {
+                games.splice(index, 1);
+                localStorage.setItem('customGames', JSON.stringify(games));
+                loadGames();
+                alert(`Jogo "${gameName}" excluído com sucesso!`);
+            }
+        }
+        
+        function clearAllGames() {
+            if (confirm('Tem certeza que deseja excluir TODOS os jogos? Esta ação não pode ser desfeita!')) {
+                localStorage.removeItem('customGames');
+                loadGames();
+                alert('Todos os jogos foram excluídos!');
+            }
+        }
+        
+        // Função de pesquisa de jogos
+        function searchGames() {
+            const searchTerm = document.getElementById('gameSearchInput').value.toLowerCase();
+            const customGames = JSON.parse(localStorage.getItem('customGames') || '[]');
+            
+            if (!searchTerm) {
+                displayGames(customGames);
+                return;
+            }
+            
+            const filteredGames = customGames.filter(game => 
+                game.name.toLowerCase().includes(searchTerm) ||
+                (game.developer && game.developer.toLowerCase().includes(searchTerm)) ||
+                (game.category && game.category.toLowerCase().includes(searchTerm)) ||
+                (game.categories && game.categories.some(cat => cat.toLowerCase().includes(searchTerm)))
+            );
+            
+            displayGames(filteredGames);
+        }
+        
+        function clearSearch() {
+            document.getElementById('gameSearchInput').value = '';
+            loadGames();
+        }
+        
+        function displayGames(games) {
+            const gamesTable = document.getElementById('gamesTable');
+            
+            if (games.length === 0) {
+                gamesTable.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: rgba(255, 255, 255, 0.6);">
+                        <i class="fas fa-gamepad" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                        <h3>Nenhum jogo encontrado</h3>
+                        <p>Não há jogos que correspondam à pesquisa.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let tableHTML = `
+                <div class="table-header">
+                    <div>Imagem</div>
+                    <div>Nome</div>
+                    <div>Categoria</div>
+                    <div>Avaliação</div>
+                    <div>Ações</div>
+                </div>
+            `;
+            
+            games.forEach((game, originalIndex) => {
+                const allGames = JSON.parse(localStorage.getItem('customGames') || '[]');
+                const realIndex = allGames.findIndex(g => g.name === game.name && g.developer === game.developer);
+                
+                tableHTML += `
+                    <div class="table-row">
+                        <div>
+                            <img src="${game.imageUrl}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" alt="${game.name}">
+                        </div>
+                        <div>
+                            <strong>${game.name}</strong><br>
+                            <small style="color: rgba(255, 255, 255, 0.6);">
+                                Por: ${game.developer || 'N/A'}
+                            </small>
+                        </div>
+                        <div>
+                            ${game.categories && game.categories.length > 0 ? 
+                                game.categories.slice(0, 2).map(cat => `
+                                    <span class="badge" style="background: linear-gradient(45deg, #00ffff, #ff0080); padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; margin-right: 5px; margin-bottom: 3px; display: inline-block;">
+                                        ${cat}
+                                    </span>
+                                `).join('') + (game.categories.length > 2 ? `<span style="color: rgba(255, 255, 255, 0.6); font-size: 0.8rem;">+${game.categories.length - 2}</span>` : '')
+                                : `<span class="badge" style="background: linear-gradient(45deg, #00ffff, #ff0080); padding: 5px 10px; border-radius: 15px;">${game.category || 'N/A'}</span>`
+                            }
+                        </div>
+                        <div>
+                            <span style="color: #ffc107;">⭐ ${game.rating}</span>
+                        </div>
+                        <div class="user-actions">
+                            <button class="action-btn-small" onclick="editGame(${realIndex})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn-small" onclick="viewGame('${game.gameUrl}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn-small danger" onclick="deleteGame(${realIndex})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            gamesTable.innerHTML = tableHTML;
+        }
+        
+        function saveGameChanges(gameIndex) {
+            const games = JSON.parse(localStorage.getItem('customGames') || '[]');
+            
+            if (gameIndex >= 0 && gameIndex < games.length) {
+                const selectedCategories = [];
+                const checkboxes = document.querySelectorAll('input[name="editCategories"]:checked');
+                checkboxes.forEach(checkbox => selectedCategories.push(checkbox.value));
+                
+                games[gameIndex].name = document.getElementById('editGameName').value;
+                games[gameIndex].developer = document.getElementById('editGameDeveloper').value;
+                games[gameIndex].categories = selectedCategories;
+                games[gameIndex].category = selectedCategories[0] || 'indie';
+                games[gameIndex].rating = parseFloat(document.getElementById('editGameRating').value);
+                games[gameIndex].description = document.getElementById('editGameDescription').value;
+                games[gameIndex].imageUrl = document.getElementById('editGameImageUrl').value;
+                games[gameIndex].gameUrl = document.getElementById('editGameUrl').value;
+                games[gameIndex].releaseDate = document.getElementById('editGameReleaseDate').value;
+                games[gameIndex].players = document.getElementById('editGamePlayers').value;
+                games[gameIndex].languages = document.getElementById('editGameLanguages').value;
+                games[gameIndex].ageRating = document.getElementById('editGameAgeRating').value;
+                games[gameIndex].features = document.getElementById('editGameFeatures').value.split(',').map(f => f.trim()).filter(f => f);
+                
+                games[gameIndex].systemRequirements = {
+                    minimum: {
+                        os: document.getElementById('editMinOS').value,
+                        processor: document.getElementById('editMinProcessor').value,
+                        memory: document.getElementById('editMinMemory').value,
+                        graphics: document.getElementById('editMinGraphics').value,
+                        storage: document.getElementById('editMinStorage').value
+                    },
+                    recommended: {
+                        os: document.getElementById('editRecOS').value,
+                        processor: document.getElementById('editRecProcessor').value,
+                        memory: document.getElementById('editRecMemory').value,
+                        graphics: document.getElementById('editRecGraphics').value,
+                        storage: document.getElementById('editRecStorage').value
+                    }
+                };
+                
+                localStorage.setItem('customGames', JSON.stringify(games));
+                closeEditScreen();
+                loadGames();
+                alert('Jogo atualizado com sucesso!');
+            }
+        }
+
+        // Tickets functions
+        function loadTickets() {
+            const ticketsTable = document.getElementById('ticketsTable');
+            const tickets = JSON.parse(localStorage.getItem('supportTickets') || '[]');
+            
+            if (tickets.length === 0) {
+                ticketsTable.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: rgba(255, 255, 255, 0.6);">
+                        <i class="fas fa-ticket-alt" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                        <h3>Nenhum ticket encontrado</h3>
+                        <p>Não há tickets de suporte.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let tableHTML = `
+                <div class="table-header">
+                    <div>ID</div>
+                    <div>Email</div>
+                    <div>Assunto</div>
+                    <div>Prioridade</div>
+                    <div>Status</div>
+                    <div>Ações</div>
+                </div>
+            `;
+            
+            tickets.forEach((ticket, index) => {
+                const priorityColors = {
+                    'critica': '#ff0040',
+                    'alta': '#ff6600',
+                    'media': '#ffcc00',
+                    'baixa': '#00ff41'
+                };
+                
+                const statusColors = {
+                    'Aberto': '#ff6600',
+                    'Em Andamento': '#ffcc00',
+                    'Resolvido': '#00ff41',
+                    'Fechado': '#666'
+                };
+                
+                tableHTML += `
+                    <div class="table-row">
+                        <div>
+                            <strong>#${ticket.id}</strong><br>
+                            <small style="color: rgba(255, 255, 255, 0.6);">
+                                ${ticket.date}
+                            </small>
+                        </div>
+                        <div>${ticket.email}</div>
+                        <div>
+                            <strong>${ticket.subject}</strong><br>
+                            <small style="color: rgba(255, 255, 255, 0.6);">
+                                ${ticket.description.substring(0, 50)}...
+                            </small>
+                        </div>
+                        <div>
+                            <span style="color: ${priorityColors[ticket.priority]}; font-weight: 700; text-transform: uppercase;">
+                                ${ticket.priority}
+                            </span>
+                        </div>
+                        <div>
+                            <span style="color: ${statusColors[ticket.status]}; font-weight: 600;">
+                                ${ticket.status}
+                            </span>
+                        </div>
+                        <div class="user-actions">
+                            <button class="action-btn-small" onclick="viewTicket(${index})" title="Ver detalhes">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn-small" onclick="resolveTicket(${index})" title="Resolver">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="action-btn-small danger" onclick="deleteTicket(${index})" title="Excluir">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            ticketsTable.innerHTML = tableHTML;
+        }
+        
+        function filterTickets(status) {
+            const tickets = JSON.parse(localStorage.getItem('supportTickets') || '[]');
+            const filtered = status === 'aberto' ? 
+                tickets.filter(t => t.status === 'Aberto' || t.status === 'Em Andamento') :
+                tickets.filter(t => t.status === 'Resolvido' || t.status === 'Fechado');
+            
+            const ticketsTable = document.getElementById('ticketsTable');
+            
+            if (filtered.length === 0) {
+                ticketsTable.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: rgba(255, 255, 255, 0.6);">
+                        <h3>Nenhum ticket ${status}</h3>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Usar mesma lógica do loadTickets mas com array filtrado
+            localStorage.setItem('supportTickets_temp', JSON.stringify(filtered));
+            const originalTickets = localStorage.getItem('supportTickets');
+            localStorage.setItem('supportTickets', JSON.stringify(filtered));
+            loadTickets();
+            localStorage.setItem('supportTickets', originalTickets);
+            localStorage.removeItem('supportTickets_temp');
+        }
+        
+        function viewTicket(index) {
+            const tickets = JSON.parse(localStorage.getItem('supportTickets') || '[]');
+            const ticket = tickets[index];
+            
+            alert(`Ticket #${ticket.id}\n\nEmail: ${ticket.email}\nAssunto: ${ticket.subject}\nPrioridade: ${ticket.priority}\nStatus: ${ticket.status}\nData: ${ticket.date}\n\nDescrição:\n${ticket.description}`);
+        }
+        
+        function resolveTicket(index) {
+            const tickets = JSON.parse(localStorage.getItem('supportTickets') || '[]');
+            
+            if (tickets[index]) {
+                tickets.splice(index, 1);
+                localStorage.setItem('supportTickets', JSON.stringify(tickets));
+                loadTickets();
+                alert('Ticket resolvido e removido com sucesso!');
+            }
+        }
+        
+        function deleteTicket(index) {
+            const tickets = JSON.parse(localStorage.getItem('supportTickets') || '[]');
+            
+            if (confirm('Tem certeza que deseja excluir este ticket?')) {
+                tickets.splice(index, 1);
+                localStorage.setItem('supportTickets', JSON.stringify(tickets));
+                loadTickets();
+                alert('Ticket excluído com sucesso!');
+            }
+        }
+    </script>
+
+    <script>
+        // Sistema de Segurança Avançado
+        function checkAdminAccess() {
+            const currentUser = localStorage.getItem('currentUser');
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const adminList = JSON.parse(localStorage.getItem('adminList') || '[]');
+            
+            // Verificar se usuário está logado
+            if (!currentUser) {
+                showSecurityScreen('Usuário não autenticado');
+                return false;
+            }
+            
+            // Verificar se usuário existe
+            const userExists = registeredUsers.some(user => user.username === currentUser);
+            if (!userExists) {
+                showSecurityScreen('Usuário inválido');
+                return false;
+            }
+            
+            // Verificar se é administrador
+            const isAdmin = adminList.includes(currentUser);
+            if (!isAdmin) {
+                showSecurityScreen('Acesso negado - Privilégios insuficientes');
+                return false;
+            }
+            
+            // Log de acesso
+            logAccess(currentUser, 'ADMIN_PANEL_ACCESS', 'SUCCESS');
+            return true;
+        }
+        
+        function showSecurityScreen(reason) {
+            document.getElementById('securityScreen').style.display = 'flex';
+            document.getElementById('adminContent').classList.add('hidden');
+            
+            // Log de tentativa de acesso negado
+            const currentUser = localStorage.getItem('currentUser') || 'ANONYMOUS';
+            logAccess(currentUser, 'ADMIN_PANEL_ACCESS', 'DENIED', reason);
+        }
+        
+        function logAccess(user, action, status, details = '') {
+            const logs = JSON.parse(localStorage.getItem('securityLogs') || '[]');
+            const logEntry = {
+                timestamp: new Date().toISOString(),
+                user: user,
+                action: action,
+                status: status,
+                details: details,
+                ip: 'LOCAL',
+                userAgent: navigator.userAgent.substring(0, 100)
+            };
+            
+            logs.push(logEntry);
+            
+            // Manter apenas os últimos 1000 logs
+            if (logs.length > 1000) {
+                logs.splice(0, logs.length - 1000);
+            }
+            
+            localStorage.setItem('securityLogs', JSON.stringify(logs));
+        }
+        
+        function redirectToHome() {
+            window.location.href = 'index.html';
+        }
+        
+        // Proteção contra ferramentas de desenvolvedor
+        function isAdminUser() {
+            const currentUser = localStorage.getItem('currentUser');
+            const adminList = JSON.parse(localStorage.getItem('adminList') || '[]');
+            return adminList.includes(currentUser);
+        }
+        
+        // Bloquear F12, Ctrl+Shift+I, Ctrl+U para não-admins
+        document.addEventListener('keydown', function(e) {
+            if (!isAdminUser()) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'C') || 
+                    (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                    logAccess(localStorage.getItem('currentUser') || 'ANONYMOUS', 'DEV_TOOLS_ATTEMPT', 'BLOCKED');
+                    alert('🔒 Ferramentas de desenvolvedor bloqueadas para não-administradores!');
+                    return false;
+                }
+            }
+        });
+        
+        // Bloquear menu de contexto para não-admins
+        document.addEventListener('contextmenu', function(e) {
+            if (!isAdminUser()) {
+                e.preventDefault();
+                logAccess(localStorage.getItem('currentUser') || 'ANONYMOUS', 'CONTEXT_MENU_ATTEMPT', 'BLOCKED');
+                alert('🔒 Menu de contexto bloqueado para não-administradores!');
+            }
+        });
+        
+        // Verificação contínua de sessão
+        setInterval(function() {
+            if (!checkAdminAccess()) {
+                // Redirecionar se perder privilégios
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }
+        }, 30000); // Verificar a cada 30 segundos
+        
+        // Inicialização segura
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar acesso imediatamente
+            const currentUser = localStorage.getItem('currentUser');
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const adminList = JSON.parse(localStorage.getItem('adminList') || '[]');
+            
+            if (currentUser && registeredUsers.some(user => user.username === currentUser) && adminList.includes(currentUser)) {
+                // Usuário é admin válido - mostrar painel
+                document.getElementById('securityScreen').style.display = 'none';
+                document.getElementById('adminContent').classList.remove('hidden');
+                
+                // Carregar dados iniciais
+                setTimeout(() => {
+                    loadUsers();
+                    loadAdmins();
+                    updateDashboardStats();
+                }, 100);
+            } else {
+                // Não é admin - mostrar tela de segurança
+                document.getElementById('securityScreen').style.display = 'flex';
+                document.getElementById('adminContent').classList.add('hidden');
+            }
+        });
+        
+        // Proteção contra modificação do localStorage
+        const originalSetItem = localStorage.setItem;
+        localStorage.setItem = function(key, value) {
+            if ((key === 'adminList' || key === 'registeredUsers') && !isAdminUser()) {
+                logAccess(localStorage.getItem('currentUser') || 'ANONYMOUS', 'UNAUTHORIZED_ADMIN_MODIFICATION', 'BLOCKED');
+                alert('🔒 Tentativa de modificação não autorizada detectada!');
+                return;
+            }
+            return originalSetItem.apply(this, arguments);
+        };
+        
+        // Atualizar estatísticas do dashboard
+        function updateDashboardStats() {
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const adminList = JSON.parse(localStorage.getItem('adminList') || '[]');
+            const customGames = JSON.parse(localStorage.getItem('customGames') || '[]');
+            const supportTickets = JSON.parse(localStorage.getItem('supportTickets') || '[]');
+            const openTickets = supportTickets.filter(t => t.status === 'Aberto' || t.status === 'Em Andamento');
+            
+            document.getElementById('totalUsers').textContent = registeredUsers.length;
+            document.getElementById('totalGamesAdmin').textContent = customGames.length;
+            document.getElementById('totalAdmins').textContent = adminList.length;
+            document.getElementById('totalTickets').textContent = openTickets.length;
+        }
+        
+        // Detectar tentativas de bypass
+        window.addEventListener('beforeunload', function() {
+            logAccess(localStorage.getItem('currentUser') || 'ANONYMOUS', 'ADMIN_PANEL_EXIT', 'INFO');
+        });
+        
+        // Proteção contra console
+        if (!isAdminUser()) {
+            const noop = () => {};
+            const methods = ['log', 'warn', 'error', 'info', 'debug', 'trace'];
+            methods.forEach(method => {
+                console[method] = noop;
+            });
+        }
+    </script>
+</body>
+</html>

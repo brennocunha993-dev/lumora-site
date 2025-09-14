@@ -1,0 +1,134 @@
+<%- include('partials/header', { title: 'Home' }) %>
+
+<div class="hero-section bg-gradient-dark text-center py-5 mb-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold text-primary mb-3">
+            <i class="fas fa-gamepad me-3"></i>GamerSite
+        </h1>
+        <p class="lead mb-4">Descubra, publique e jogue os melhores jogos indie</p>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form action="/games" method="GET" class="d-flex">
+                    <input type="text" name="search" class="form-control bg-dark text-light border-secondary" 
+                           placeholder="Buscar jogos...">
+                    <button type="submit" class="btn btn-primary ms-2">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h2 class="h3 mb-3">
+                <i class="fas fa-fire text-danger me-2"></i>Jogos em Destaque
+            </h2>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="/games" class="btn btn-outline-primary">Ver Todos os Jogos</a>
+        </div>
+    </div>
+
+    <% if (games && games.length > 0) { %>
+        <div class="row">
+            <% games.forEach(game => { %>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card bg-dark border-secondary h-100 game-card">
+                        <% if (game.images && game.images.length > 0) { %>
+                            <img src="<%= game.images[0] %>" class="card-img-top" alt="<%= game.title %>" 
+                                 style="height: 200px; object-fit: cover;">
+                        <% } else { %>
+                            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" 
+                                 style="height: 200px;">
+                                <i class="fas fa-gamepad fa-3x text-muted"></i>
+                            </div>
+                        <% } %>
+                        
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-light"><%= game.title %></h5>
+                            <p class="card-text text-muted small flex-grow-1">
+                                <%= game.description.substring(0, 100) %>...
+                            </p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-primary"><%= game.genre %></span>
+                                <div class="text-warning">
+                                    <% for (let i = 1; i <= 5; i++) { %>
+                                        <i class="fas fa-star<%= i <= Math.round(game.rating) ? '' : '-o' %>"></i>
+                                    <% } %>
+                                    <small class="text-muted">(<%= game.rating.toFixed(1) %>)</small>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-download me-1"></i><%= game.downloads %>
+                                    <i class="fas fa-eye ms-2 me-1"></i><%= game.views %>
+                                </small>
+                                <% if (game.price > 0) { %>
+                                    <span class="text-success fw-bold">R$ <%= game.price.toFixed(2) %></span>
+                                <% } else { %>
+                                    <span class="text-success fw-bold">GRÁTIS</span>
+                                <% } %>
+                            </div>
+                            
+                            <a href="/games/<%= game._id %>" class="btn btn-primary mt-2">
+                                Ver Detalhes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <div class="text-center py-5">
+            <i class="fas fa-gamepad fa-4x text-muted mb-3"></i>
+            <h3 class="text-muted">Nenhum jogo encontrado</h3>
+            <p class="text-muted">Seja o primeiro a publicar um jogo!</p>
+            <a href="/games/submit/new" class="btn btn-primary">Publicar Jogo</a>
+        </div>
+    <% } %>
+
+    <div class="row mt-5">
+        <div class="col-md-4 text-center mb-4">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-body">
+                    <i class="fas fa-upload fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Publique Seus Jogos</h5>
+                    <p class="card-text text-muted">
+                        Compartilhe suas criações com a comunidade gamer
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 text-center mb-4">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-body">
+                    <i class="fas fa-users fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Comunidade Ativa</h5>
+                    <p class="card-text text-muted">
+                        Conecte-se com outros desenvolvedores e jogadores
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 text-center mb-4">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-body">
+                    <i class="fas fa-shield-alt fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Segurança Total</h5>
+                    <p class="card-text text-muted">
+                        Autenticação 2FA e moderação ativa
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

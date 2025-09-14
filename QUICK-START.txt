@@ -1,0 +1,26 @@
+🎮 GAMERSITE - INÍCIO RÁPIDO
+
+❌ ERRO: npm não encontrado = Node.js não instalado
+
+✅ SOLUÇÃO:
+1. Vá em: https://nodejs.org/
+2. Baixe e instale o Node.js LTS
+3. Reinicie o computador
+4. Execute: START.bat
+
+📋 DEPOIS DE INSTALAR NODE.JS:
+1. Clique duas vezes em START.bat
+2. Aguarde a instalação automática
+3. Acesse: http://localhost:3000
+
+🔧 OU MANUALMENTE:
+npm install
+npm start
+
+📱 PRIMEIRO ACESSO:
+- Registre uma conta
+- Para ser admin: altere role no MongoDB
+
+🆘 PROBLEMAS?
+- Leia: INSTALL.md
+- Verifique: SETUP-NODEJS.md
